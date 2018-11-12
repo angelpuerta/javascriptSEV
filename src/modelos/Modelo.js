@@ -19,11 +19,13 @@ class Modelo {
         return false;
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
+        scrollY = scrollY || 0;
+
         contexto.drawImage(this.imagen,
             this.x - this.imagen.width/2 - scrollX,
-            this.y - this.imagen.height/2);
+            this.y - this.imagen.height/2 - scrollY);
     }
 
 

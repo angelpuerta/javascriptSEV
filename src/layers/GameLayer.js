@@ -115,19 +115,22 @@ class GameLayer extends Layer {
 
     calcularScroll() {
         // limite izquierda
-        if (this.jugador.x > 480 * 0.3) {
-            if (this.jugador.x > 480 * 0.3) {
-                if (this.jugador.x - this.scrollX < 480 * 0.3) {
-                    this.scrollX = this.jugador.x - 480 * 0.3;
-                }
+        if (this.jugador.x > 480 * 0.3)
+            if (this.jugador.x - this.scrollX < 480 * 0.3) {
+                this.scrollX = this.jugador.x - 480 * 0.3;
             }
-
-            // limite derecha
-            if (this.jugador.x < this.anchoMapa - 480 * 0.3) {
-                if (this.jugador.x - this.scrollX > 480 * 0.7) {
-                    this.scrollX = this.jugador.x - 480 * 0.7;
-                }
+        // limite derecha
+        if (this.jugador.x < this.anchoMapa - 480 * 0.3)
+            if (this.jugador.x - this.scrollX > 480 * 0.7) {
+                this.scrollX = this.jugador.x - 480 * 0.7;
             }
+        //arriba
+        if(this.jugador.y - this.scrollY< 320*0.3 ){
+            this.scrollY = this.jugador.y - 320*0.3;
+        }
+        //abajo
+        if(this.jugador.y - this.scrollY > 320*0.7){
+            this.scrollY = this.jugador.y - 320*0.7;
         }
     }
 
@@ -135,15 +138,15 @@ class GameLayer extends Layer {
         this.calcularScroll();
         this.fondo.dibujar();
         for (var i = 0; i < this.bloques.length; i++) {
-            this.bloques[i].dibujar(this.scrollX);
+            this.bloques[i].dibujar(this.scrollX,this.scrollY);
         }
         for (var i = 0; i < this.disparosJugador.length; i++) {
-            this.disparosJugador[i].dibujar(this.scrollX);
+            this.disparosJugador[i].dibujar(this.scrollX,this.scrollY);
         }
-        this.copa.dibujar(this.scrollX);
-        this.jugador.dibujar(this.scrollX);
+        this.copa.dibujar(this.scrollX, this.scrollY);
+        this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i = 0; i < this.enemigos.length; i++) {
-            this.enemigos[i].dibujar(this.scrollX);
+            this.enemigos[i].dibujar(this.scrollX, this.scrollY);
         }
 
         if (this.pausa) {
@@ -264,7 +267,9 @@ class GameLayer extends Layer {
             var texto = fichero.responseText;
             var lineas = texto.split('\n');
             this.anchoMapa = (lineas[0].length - 1) * 40;
-            for (var i = 0; i < lineas.length; i++) {
+            this.altoMapa = (lineas.length-1)*32;
+           // this.ponerParedes(lineas);
+            for (var i = 1; i < lineas.length; i++) {
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++) {
                     var simbolo = linea[j];
@@ -273,13 +278,42 @@ class GameLayer extends Layer {
                     this.cargarObjetoMapa(simbolo, x, y);
                 }
             }
+
         }.bind(this);
 
         fichero.send(null);
     }
+    ponerParedes(lineas){
+        var bloque,x,y;
+        for (var i = 0; i < lineas.length+1; i++) {
+            x = -40/2+i*40;
+            y = this.altoMapa+32/2;
+            this.agregarBloque(new Bloque(imagenes.pared,x,y));
+            y = -32/2;
+            this.agregarBloque(new Bloque(imagenes.pared,x,y));
+
+        }
+        for (var i = 0; i < lineas[0].length+1; i++) {
+            x = -40/2;
+            y = -40/2 + i*32 ;
+            this.agregarBloque(new Bloque(imagenes.pared,x,y));
+            x = this.anchoMapa +40/2;
+            this.agregarBloque(new Bloque(imagenes.pared,x,y));
+        }
+    }
+
+    agregarBloque(bloque){
+        this.espacio.agregarCuerpoEstatico(bloque);
+        this.bloques.push(bloque);
+    }
 
 
     cargarObjetoMapa(simbolo, x, y) {
+        var bloque = new Bloque(imagenes.suelo, x,y);
+        bloque.y = bloque.y - bloque.alto/2;
+        // modificación para empezar a contar desde el suelo
+        this.bloques.push(bloque);
+
         switch (simbolo) {
             case "C":
                 this.copa = new Bloque(imagenes.copa, x, y);

@@ -158,14 +158,16 @@ class Jugador extends Modelo {
         }
     }
 
-    dibujar(scrollX) {
+    dibujar(scrollX, scrollY) {
         scrollX = scrollX || 0;
+        scrollY = scrollY || 0;
+
         if (this.tiempoInvulnerable > 0) {
             contexto.globalAlpha = 0.5;
-            this.animacion.dibujar(this.x - scrollX, this.y);
+            this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
             contexto.globalAlpha = 1;
         } else {
-            this.animacion.dibujar(this.x - scrollX, this.y);
+            this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
         }
     }
 

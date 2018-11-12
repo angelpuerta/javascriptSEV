@@ -68,9 +68,11 @@ class Enemigo extends Modelo {
         }
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
-        this.animacion.dibujar(this.x - scrollX, this.y);
+        scrollY = scrollY || 0;
+
+        this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
     }
 
 }
