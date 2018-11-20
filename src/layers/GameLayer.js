@@ -16,6 +16,7 @@ class GameLayer extends Layer {
         this.espacio = new Espacio();
 
         this.scrollX = 0;
+        this.scrollY = 0;
         this.bloques = [];
         this.fondoPuntos =
             new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
@@ -29,6 +30,8 @@ class GameLayer extends Layer {
 
         this.enemigos = [];
 
+        this.puertas = [];
+
         this.cargarMapa("res/" + nivelActual + ".txt");
     }
 
@@ -37,21 +40,6 @@ class GameLayer extends Layer {
             return;
         }
 
-        if (this.copa.colisiona(this.jugador)) {
-            nivelActual++;
-            if (nivelActual > nivelMaximo) {
-                nivelActual = 0;
-            }
-            this.pausa = true;
-            this.mensaje =
-                new Boton(imagenes.mensaje_ganar, 480 / 2, 320 / 2);
-            this.iniciar();
-        }
-
-        // Jugador se cae
-        if (this.jugador.y > 480) {
-            this.iniciar();
-        }
 
         this.espacio.actualizar();
         this.fondo.vx = -1;
@@ -110,6 +98,18 @@ class GameLayer extends Layer {
             }
         }
 
+        if(this.enemigos.length == 0){
+            this.puertas.forEach(x=>x.open())
+        }
+
+        for (var j = 0; j < this.puertas.length; j++) {
+            if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])){
+                this.pausa = true;
+                nivelActual = this.puertas[i].getNextLevel();
+                this.iniciar();
+            }
+        }
+
     }
 
 
@@ -143,14 +143,14 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX,this.scrollY);
         }
-        this.copa.dibujar(this.scrollX, this.scrollY);
         this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].dibujar(this.scrollX, this.scrollY);
         }
+        this.puertas.forEach(x=>x.dibujar(this.scrollX, this.scrollY));
 
         if (this.pausa) {
-            this.mensaje.dibujar();
+            this.mensaje.dibujar(this.scrollX,this.scrollY);
         }
     }
 
@@ -268,7 +268,7 @@ class GameLayer extends Layer {
             var lineas = texto.split('\n');
             this.anchoMapa = (lineas[0].length - 1) * 40;
             this.altoMapa = (lineas.length-1)*32;
-           // this.ponerParedes(lineas);
+            this.ponerParedes(lineas);
             for (var i = 1; i < lineas.length; i++) {
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++) {
@@ -285,15 +285,15 @@ class GameLayer extends Layer {
     }
     ponerParedes(lineas){
         var bloque,x,y;
-        for (var i = 0; i < lineas.length+1; i++) {
+        for (var i = 0; i < lineas[0].length+1; i++) {
             x = -40/2+i*40;
-            y = this.altoMapa+32/2;
+            y = this.altoMapa+32*3/2;
             this.agregarBloque(new Bloque(imagenes.pared,x,y));
-            y = -32/2;
+            y = 32/2;
             this.agregarBloque(new Bloque(imagenes.pared,x,y));
 
         }
-        for (var i = 0; i < lineas[0].length+1; i++) {
+        for (var i = 0; i < lineas.length+1; i++) {
             x = -40/2;
             y = -40/2 + i*32 ;
             this.agregarBloque(new Bloque(imagenes.pared,x,y));
@@ -315,12 +315,6 @@ class GameLayer extends Layer {
         this.bloques.push(bloque);
 
         switch (simbolo) {
-            case "C":
-                this.copa = new Bloque(imagenes.copa, x, y);
-                this.copa.y = this.copa.y - this.copa.alto / 2;
-                // modificación para empezar a contar desde el suelo
-                this.espacio.agregarCuerpoDinamico(this.copa);
-                break;
             case "E":
                 var enemigo = new Enemigo(x, y);
                 enemigo.y = enemigo.y - enemigo.alto / 2;
@@ -328,7 +322,7 @@ class GameLayer extends Layer {
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
                 break;
-            case "1":
+            case "J":
                 this.jugador = new Jugador(x, y);
                 // modificación para empezar a contar desde el suelo
                 this.jugador.y = this.jugador.y - this.jugador.alto / 2;
@@ -340,6 +334,14 @@ class GameLayer extends Layer {
                 // modificación para empezar a contar desde el suelo
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);
+                break;
+            default:
+                if(!isNaN(parseInt(simbolo, 10))){
+                    var nextLevel = parseInt(simbolo, 10);
+                    var puerta = new Puerta(x,y,nextLevel);
+                    this.puertas.push(puerta);
+                    this.espacio.agregarCuerpoEstatico(puerta)
+                }
                 break;
         }
     }

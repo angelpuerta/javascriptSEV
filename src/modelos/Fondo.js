@@ -29,9 +29,10 @@ class Fondo extends Modelo {
         }
     }
 
-    dibujar(scrollX){
+    dibujar(scrollX,scrollY){
         scrollX = scrollX || 0;
-        super.dibujar(scrollX);
+        scrollY = scrollY || 0;
+        super.dibujar(scrollX,scrollY);
 
         if ( this.fondoAux != null ) {
             // hueco por la izquierda
@@ -44,7 +45,7 @@ class Fondo extends Modelo {
                 // pintar auxiliar por la derecha
                 this.fondoAux.x =this.x + this.ancho;
             }
-            this.fondoAux.dibujar(scrollX);
+            this.fondoAux.dibujar(scrollX,scrollY);
         }
 
 
