@@ -11,7 +11,7 @@ function onKeyDown(event) {
         teclas.push(event.keyCode);
         switch (event.keyCode) {
             case 32:
-                controles.continuar = true;
+                controles.bomba = true;
                 break;
             case 27:
                 controles.pausar = true;

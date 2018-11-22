@@ -17,6 +17,7 @@ class GameLayer extends Layer {
 
         this.scrollX = 0;
         this.scrollY = 0;
+        this.bombasJugador=10;
         this.bloques = [];
    //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
@@ -27,6 +28,8 @@ class GameLayer extends Layer {
         this.disparosJugador = []
 
         this.enemigos = [];
+
+        this.bombas = [];
 
         this.puertas = [];
 
@@ -53,6 +56,9 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].actualizar();
         }
+        for (var i = 0; i < this.bombas.length; i++) {
+            this.bombas[i].actualizar();
+        }
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].actualizar();
         }
@@ -64,6 +70,14 @@ class GameLayer extends Layer {
                 if (this.jugador.vidas <= 0) {
                     this.iniciar();
                 }
+            }
+        }
+
+        // colisiones Con Bomba
+        for (var i = 0; i < this.bombas.length; i++) {
+            if (this.jugador.colisiona(this.bombas[i])) {
+                this.bombasJugador++;
+                this.bombas.splice(i,1);
             }
         }
         // colisiones , disparoJugador - Enemigo
@@ -141,6 +155,9 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
         }
+        for (var i = 0; i < this.bombas.length; i++) {
+            this.bombas[i].dibujar(this.scrollX, this.scrollY);
+        }
         this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].dibujar(this.scrollX, this.scrollY);
@@ -191,6 +208,7 @@ class GameLayer extends Layer {
                 }
             }
 
+
         }
 
         // No pulsado - Boton Disparo
@@ -212,6 +230,14 @@ class GameLayer extends Layer {
         if (controles.pausar) {
             this.pausa = true;
         }
+        if(controles.bomba){
+            var nuevaBomba=this.jugador.poneBomba();
+            if(nuevaBomba!=null){
+                this.espacio.agregarCuerpoDinamico(nuevaBomba);
+                this.bombas.push(nuevaBomba);
+            }
+            controles.bomba=false;
+        }
         // disparar
         if (controles.disparo) {
             this.jugador.cambiarOrientacion(controles.disparo);
@@ -223,6 +249,7 @@ class GameLayer extends Layer {
             controles.disparo = false;
         }
 
+        //if(controles.)
         // Eje X
         if (controles.moverX > 0) {
             this.jugador.moverX(1);
@@ -333,6 +360,13 @@ class GameLayer extends Layer {
                 // modificación para empezar a contar desde el suelo
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);
+                break;
+            case "B":
+                var bomba = new Bomba(imagenes.bomba, x, y);
+                bomba.y = bomba.y - bomba.alto/2;
+                // modificación para empezar a contar desde el suelo
+                this.bombas.push(bomba);
+                this.espacio.agregarCuerpoDinamico(bomba);
                 break;
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {

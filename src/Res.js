@@ -40,7 +40,10 @@ var imagenes = {
     mensaje_ganar : "res/mensaje_ganar.png",
     mensaje_perder : "res/mensaje_perder.png",
     puerta_abierta : "res/open_door.png",
-    puerta_cerrada : "res/closed_door.png"
+    puerta_cerrada : "res/closed_door.png",
+    bomba: "res/bomba.png",
+    bomba_explota: "res/bombaexplota.png",
+    explosion: "res/explosion.png",
 };
 
 var rutasImagenes = Object.values(imagenes);

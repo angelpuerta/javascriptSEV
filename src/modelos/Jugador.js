@@ -61,6 +61,11 @@ class Jugador extends Modelo {
             return null;
         }
     }
+    poneBomba(){
+        var bomba = new Bomba(imagenes.bomba,this.x,this.y);
+        bomba.estado=estados.explotando;
+        return bomba;
+    }
 
     finAnimacionDisparar() {
         this.estado = estados.moviendo;
