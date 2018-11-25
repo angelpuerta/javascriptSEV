@@ -173,6 +173,7 @@ class GameLayer extends Layer {
             this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
         }
         this.disparosEnemigo.forEach(x => x.dibujar(this.scrollX, this.scrollY));
+
         for (var i = 0; i < this.bombas.length; i++) {
             this.bombas[i].dibujar(this.scrollX, this.scrollY);
         }
