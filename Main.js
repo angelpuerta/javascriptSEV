@@ -28,6 +28,7 @@ function loop(){
     layer.dibujar();
 
     actualizarPulsaciones();
+
 }
 
 

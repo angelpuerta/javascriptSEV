@@ -18,17 +18,20 @@ class GameLayer extends Layer {
         this.scrollX = 0;
         this.scrollY = 0;
         this.bloques = [];
-   //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
+        //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
- //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
+        //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
 
         this.fondo = new Fondo(imagenes.fondo_2, 480 * 0.5, 320 * 0.5);
 
-        this.disparosJugador = []
+        this.disparosJugador = [];
+        this.disparosEnemigo = [];
 
         this.enemigos = [];
 
         this.puertas = [];
+
+        this.jugador = new Jugador(50, 50);//Pa que no se queje
 
         this.cargarMapa("res/" + nivelActual + ".txt");
     }
@@ -43,19 +46,25 @@ class GameLayer extends Layer {
         this.fondo.vx = -1;
         this.fondo.actualizar();
         this.jugador.actualizar();
+        this.enemigos.forEach(x => x.actualizar());
+        this.disparosJugador.forEach(x => x.actualizar());
+        this.disparosEnemigo.forEach(x => x.actualizar());
+
+        for (var i = 0; i < this.disparosEnemigo.length; i++) {
+            if (this.disparosEnemigo[i] != null && this.disparosEnemigo[i].colisiona(this.jugador)) {
+                this.jugador.golpeado();
+                this.disparosEnemigo.splice(i, 1);
+            }
+        }
 
         // Eliminar disparos sin velocidad
         for (var i = 0; i < this.disparosJugador.length; i++) {
-            this.limpiarDisparos(i);
+            this.limpiarDisparos(this.disparosJugador, i);
+        }
+        for (var i = 0; i < this.disparosEnemigo.length; i++) {
+            this.limpiarDisparos(this.disparosEnemigo, i);
         }
 
-
-        for (var i = 0; i < this.enemigos.length; i++) {
-            this.enemigos[i].actualizar();
-        }
-        for (var i = 0; i < this.disparosJugador.length; i++) {
-            this.disparosJugador[i].actualizar();
-        }
 
         // colisiones
         for (var i = 0; i < this.enemigos.length; i++) {
@@ -78,8 +87,6 @@ class GameLayer extends Layer {
                         .eliminarCuerpoDinamico(this.disparosJugador[i]);
                     this.disparosJugador.splice(i, 1);
                     this.enemigos[j].impactado();
-                    this.puntos.valor++;
-
                 }
             }
         }
@@ -96,7 +103,7 @@ class GameLayer extends Layer {
             }
         }
 
-        if (this.enemigos.length == 0) {
+        if (this.isHabitacionSinEnemigos()) {
             this.puertas.forEach(x => x.open())
         }
 
@@ -108,6 +115,11 @@ class GameLayer extends Layer {
             }
         }
 
+    }
+
+
+    isHabitacionSinEnemigos() {
+        return this.enemigos.length == 0;
     }
 
 
@@ -135,16 +147,19 @@ class GameLayer extends Layer {
     dibujar() {
         this.calcularScroll();
         this.fondo.dibujar();
+
         for (var i = 0; i < this.bloques.length; i++) {
             this.bloques[i].dibujar(this.scrollX, this.scrollY);
         }
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
         }
+        this.disparosEnemigo.forEach(x => x.dibujar(this.scrollX, this.scrollY));
         this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].dibujar(this.scrollX, this.scrollY);
         }
+
         this.puertas.forEach(x => x.dibujar(this.scrollX, this.scrollY));
 
         if (this.pausa) {
@@ -246,13 +261,13 @@ class GameLayer extends Layer {
 
     }
 
-    limpiarDisparos(i) {
-        if (this.disparosJugador[i] != null &&
-            this.disparosJugador[i].vx == 0 && this.disparosJugador[i].vy == 0 || !this.disparosJugador[i].estaEnPantalla()) {
+    limpiarDisparos(tipo, i) {
+        if (tipo[i] != null &&
+            (tipo[i].vx == 0 && tipo[i].vy == 0 || !tipo[i].estaEnPantalla())) {
 
             this.espacio
-                .eliminarCuerpoDinamico(this.disparosJugador[i]);
-            this.disparosJugador.splice(i, 1);
+                .eliminarCuerpoDinamico(tipo[i]);
+            tipo.splice(i, 1);
         }
     }
 
@@ -276,10 +291,11 @@ class GameLayer extends Layer {
                     this.cargarObjetoMapa(simbolo, x, y);
                 }
             }
-
+            this.wavefront = new Wavefront(this.altoMapa, this.anchoMapa);
         }.bind(this);
 
         fichero.send(null);
+
     }
 
     ponerParedes(lineas) {
@@ -292,11 +308,11 @@ class GameLayer extends Layer {
             this.agregarBloque(new Bloque(imagenes.pared, x, y));
 
         }
-        for (var i = 0; i < lineas.length+1; i++) {
+        for (var i = 0; i < lineas.length + 1; i++) {
             x = -40 / 2;
-            y = 32/2 + i * 32;
+            y = 32 / 2 + i * 32;
             this.agregarBloque(new Bloque(imagenes.pared, x, y));
-            x = this.anchoMapa + 40*3 / 2;
+            x = this.anchoMapa + 40 * 3 / 2;
             this.agregarBloque(new Bloque(imagenes.pared, x, y));
         }
     }
@@ -334,6 +350,35 @@ class GameLayer extends Layer {
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);
                 break;
+            case "V":
+                var enemigo = new EnemigoVolador(x, y);
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                this.enemigos.push(enemigo);
+                break;
+            case "X":
+                var enemigo = new AxisEnemigo(x, y, "X");
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
+            case "Y":
+                var enemigo = new AxisEnemigo(x, y, "Y");
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
+            case "S":
+                var enemigo = new EnemigoSubterraneo(x, y);
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
+            case "D":
+                var enemigo = new EnemigoDivisible(x, y);
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {
                     var nextLevel = parseInt(simbolo, 10);
@@ -343,6 +388,7 @@ class GameLayer extends Layer {
                 }
                 break;
         }
+
     }
 
 }

@@ -1,4 +1,4 @@
-class Enemigo extends Modelo {
+class Enemigo extends BaseEnemigo {
 
     constructor(x, y) {
         super(imagenes.enemigo, x, y)

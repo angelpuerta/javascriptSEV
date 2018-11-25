@@ -19,12 +19,15 @@ cuerpo.dinamico = 1;
 cuerpo.estatico = 2;
 
 var estados = {};
-estados.moviendo= 2; // Incluye parado, derecha , izquierda
+estados.moviendo = 2; // Incluye parado, derecha , izquierda
 estados.saltando = 3;
 estados.muriendo = 4;
 estados.muerto = 5;
 estados.disparando = 6;
 estados.impactado = 7;
+estados.invencible = 8;
+estados.enterrado = 9;
+estados.enterrandose = 10;
 
 var orientaciones = {};
 orientaciones.arriba = 1;
@@ -43,3 +46,11 @@ TECLAS.ATAQUE_ARRIBA = 38;
 TECLAS.ATAQUE_ABAJO = 40;
 TECLAS.ATAQUE_DERECHA = 39;
 TECLAS.ATAQUE_IZQUIERDA = 37;
+
+var pixel = {};
+pixel.alto = 32;
+pixel.ancho = 40;
+
+var axis = {};
+axis.X = "X";
+axis.Y = "Y";

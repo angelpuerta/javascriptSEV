@@ -40,7 +40,21 @@ var imagenes = {
     mensaje_ganar : "res/mensaje_ganar.png",
     mensaje_perder : "res/mensaje_perder.png",
     puerta_abierta : "res/open_door.png",
-    puerta_cerrada : "res/closed_door.png"
+    puerta_cerrada : "res/closed_door.png",
+    enemigo_vuela_izquierda : "res/enemigos/persiguevuela_izquierda.png",
+    enemigo_vuela_derecha   : "res/enemigos/persiguevuela_derecha.png",
+    enemigo_vuela           : "res/enemigos/enemigo_vuela.png",
+    enemigo_axis            : "res/enemigos/enemigo_axis.png",
+    enemigo_axis_animacion  : "res/enemigos/enemigo_axis_frente.png",
+    enemigo_axis_cubriendose: "res/enemigos/enemigo_axis_cubriendose.png",
+    enemigo_subterraneo     : "res/enemigos/enemigo_subterraneo.png",
+    enemigo_subterraneo_animacion: "res/enemigos/enemigo_subterraneo_animacion.png",
+    enemigo_subterraneo_esconderse:"res/enemigos/enemigo_subterraneo_esconderse.png",
+    enemigo_divisible: "res/enemigos/enemigo_divisible.png",
+    enemigo_divisible_derecha: "res/enemigos/enemigo_divisible_derecha.png",
+    enemigo_divisible_izquierda: "res/enemigos/enemigo_divisible_izquieda.png",
+    enemigo_dividido: "res/enemigos/enemigo_dividido.png",
+    enemigo_dividido_animacion: "res/enemigos/enemigo_dividido_animacion.png"
 };
 
 var rutasImagenes = Object.values(imagenes);
