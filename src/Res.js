@@ -55,6 +55,9 @@ var imagenes = {
     enemigo_divisible_izquierda: "res/enemigos/enemigo_divisible_izquieda.png",
     enemigo_dividido: "res/enemigos/enemigo_dividido.png",
     enemigo_dividido_animacion: "res/enemigos/enemigo_dividido_animacion.png"
+    bomba: "res/bomba.png",
+    bomba_explota: "res/bombaexplota.png",
+    explosion: "res/explosion.png",
 };
 
 var rutasImagenes = Object.values(imagenes);
