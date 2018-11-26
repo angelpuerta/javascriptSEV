@@ -10,19 +10,27 @@ class GameLayer extends Layer {
     iniciar() {
         reproducirMusica();
 
+
+
         this.botonSalto = new Boton(imagenes.boton_salto, 480 * 0.9, 320 * 0.55);
         this.botonDisparo = new Boton(imagenes.boton_disparo, 480 * 0.75, 320 * 0.83);
         this.pad = new Pad(480 * 0.14, 320 * 0.8);
         this.espacio = new Espacio();
 
+        this.corazon_1 = new Fondo(imagenes.vida_llena,480*0.1,320*0.05);
+        this.corazon_2 = new Fondo(imagenes.vida_llena,480*0.125,320*0.05);
+        this.corazon_3 = new Fondo(imagenes.vida_llena,480*0.15,320*0.05);
+
         this.scrollX = 0;
         this.scrollY = 0;
-        this.bombasJugador = 10;
+        this.bombasJugador = 1;
         this.bloques = [];
         this.piedras=[];
+        this.corazones=[];
         //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
         //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
+
 
         this.fondo = new Fondo(imagenes.fondo_2, 480 * 0.5, 320 * 0.5);
 
@@ -160,6 +168,21 @@ class GameLayer extends Layer {
 
             }
         }
+        // colisiones , jugador - corazon
+        // colisiones Con Bomba
+        for (var i = 0; i < this.corazones.length; i++) {
+            if (this.jugador.colisiona(this.corazones[i])) {
+                if(this.jugador.vidas<6){
+                this.jugador.vidas=this.jugador.vidas+2;
+                this.corazones.splice(i, 1);}
+                if(this.jugador.vidas>=6){
+                    this.jugador.vidas=6;
+                    this.corazones[i].x=this.corazones[i].x+this.jugador.vx;
+                    this.corazones[i].y=this.corazones[i].y+this.jugador.vy;
+                }
+            }
+
+        }
 
         if (this.isHabitacionSinEnemigos()) {
             this.puertas.forEach(x => x.open())
@@ -172,6 +195,7 @@ class GameLayer extends Layer {
                 this.iniciar();
             }
         }
+        this.calculaVida();
 
     }
 
@@ -201,16 +225,54 @@ class GameLayer extends Layer {
             this.scrollY = this.jugador.y - 320 * 0.7;
         }
     }
+    calculaVida() {
+        var vida=this.jugador.vidas
+        if(vida>=2) {
+            this.corazon_1.imagen.src=imagenes.vida_llena;
+            if(vida==3){
+                this.corazon_2.imagen.src=imagenes.vida_media;
+                this.corazon_3.imagen.src=imagenes.vida_vacia;
+            }
+            else if (vida >= 4) {
+                this.corazon_2.imagen.src=imagenes.vida_llena;
+                if(vida==4)this.corazon_3.imagen.src=imagenes.vida_vacia;
+                if (vida ==5)this.corazon_3.imagen.src=imagenes.vida_media;
+                if (vida == 6) this.corazon_3.imagen.src=imagenes.vida_llena;
+
+            }
+            else{
+                this.corazon_3.imagen.src=imagenes.vida_vacia;
+                this.corazon_2.imagen.src=imagenes.vida_vacia;
+            }
+        }
+        else if(vida==1){
+            this.corazon_1.imagen.src=imagenes.vida_media;
+            this.corazon_3.imagen.src=imagenes.vida_vacia;
+            this.corazon_2.imagen.src=imagenes.vida_vacia;
+        }
+        else{
+            this.corazon_1.imagen.src=imagenes.vida_vacia;
+            this.corazon_3.imagen.src=imagenes.vida_vacia;
+            this.corazon_2.imagen.src=imagenes.vida_vacia;
+        }
+    }
 
     dibujar() {
         this.calcularScroll();
         this.fondo.dibujar();
+
+        this.corazon_1.dibujar();
+        this.corazon_2.dibujar();
+        this.corazon_3.dibujar();
 
         for (var i = 0; i < this.bloques.length; i++) {
             this.bloques[i].dibujar(this.scrollX, this.scrollY);
         }
         for (var i = 0; i < this.piedras.length; i++) {
             this.piedras[i].dibujar(this.scrollX, this.scrollY);
+        }
+        for (var i = 0; i < this.corazones.length; i++) {
+            this.corazones[i].dibujar(this.scrollX, this.scrollY);
         }
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
@@ -300,13 +362,15 @@ class GameLayer extends Layer {
             this.pausa = true;
         }
         if (controles.bomba) {
-            var nuevaBomba = this.jugador.poneBomba();
-            if (nuevaBomba != null) {
-                this.espacio.agregarCuerpoDinamico(nuevaBomba);
-                this.bombas.push(nuevaBomba);
-            }
-            controles.bomba = false;
-        }
+            if(this.bombasJugador>0) {
+                this.bombasJugador--
+                var nuevaBomba = this.jugador.poneBomba();
+                if (nuevaBomba != null) {
+                    this.espacio.agregarCuerpoDinamico(nuevaBomba);
+                    this.bombas.push(nuevaBomba);
+                }
+                controles.bomba = false;
+            }}
         // disparar
         if (controles.disparo) {
             this.jugador.cambiarOrientacion(controles.disparo);
@@ -476,6 +540,14 @@ class GameLayer extends Layer {
                 // modificación para empezar a contar desde el suelo
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
+
+            case "c":
+                var corazon = new Modelo(imagenes.corazon,x, y);
+                corazon.y = corazon.y - corazon.alto / 2;
+                // modificación para empezar a contar desde el suelo
+                this.corazones.push(corazon);
+                this.espacio.agregarCuerpoDinamico(corazon);
                 break;
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {

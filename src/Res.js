@@ -58,12 +58,16 @@ var imagenes = {
     bomba: "res/bomba.png",
     bomba_explota: "res/bombaexplota.png",
     explosion: "res/explosion.png",
+    vida_llena:"res/vida_llena.png",
+    vida_media:"res/vida_media.png",
+    vida_vacia:"res/vida_vacia.png",
     icono_explosion: "res/icono_explosion.png",
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
     ataque_cuerpo: "res/slash.png",
     boss_dukeofflies: "res/Bosses/boss_dukeofflies.png",
-    boss_dukeofflies_animacion: "res/Bosses/boss_dukeofflies_animacion.png"
+    boss_dukeofflies_animacion: "res/Bosses/boss_dukeofflies_animacion.png",
+    corazon: "res/corazon.png"
 };
 
 var rutasImagenes = Object.values(imagenes);

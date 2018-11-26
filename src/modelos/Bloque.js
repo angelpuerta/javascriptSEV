@@ -4,4 +4,5 @@ class Bloque extends Modelo {
         super(rutaImagen, x, y)
     }
 
+
 }

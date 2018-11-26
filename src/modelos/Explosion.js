@@ -20,6 +20,7 @@ class Explosion extends Modelo {
         this.estado=estados.muriendo;
 
 
+
     }
 
 
