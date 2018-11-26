@@ -58,6 +58,7 @@ var imagenes = {
     bomba: "res/bomba.png",
     bomba_explota: "res/bombaexplota.png",
     explosion: "res/explosion.png",
+    icono_explosion: "res/icono_explosion.png",
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
     ataque_cuerpo: "res/slash.png",

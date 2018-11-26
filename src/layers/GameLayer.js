@@ -19,6 +19,7 @@ class GameLayer extends Layer {
         this.scrollY = 0;
         this.bombasJugador = 10;
         this.bloques = [];
+        this.piedras=[];
         //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
         //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
@@ -31,6 +32,8 @@ class GameLayer extends Layer {
         this.enemigos = [];
 
         this.bombas = [];
+
+        this.explosiones = [];
 
         this.puertas = [];
 
@@ -66,7 +69,25 @@ class GameLayer extends Layer {
             this.enemigos[i].actualizar();
         }
         for (var i = 0; i < this.bombas.length; i++) {
-            this.bombas[i].actualizar();
+            if(this.bombas[i].estado==estados.muriendo){
+                var explosion=this.bombas[i].explota();
+                this.explosiones.push(explosion);
+                this.espacio.agregarCuerpoDinamico(explosion);
+                this.bombas.splice(i, 1);
+
+            }
+            else {
+                this.bombas[i].actualizar();
+            }
+
+        }
+        for (var i = 0; i < this.explosiones.length; i++) {
+            this.explosiones[i].actualizar();
+            if(this.explosiones[i].estado==estados.muriendo){
+                this.espacio.eliminarCuerpoDinamico(this.explosiones[i]);
+                this.explosiones.splice(i,1);
+
+            }
         }
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.limpiarDisparos(this.disparosJugador, i);
@@ -88,9 +109,28 @@ class GameLayer extends Layer {
 
         // colisiones Con Bomba
         for (var i = 0; i < this.bombas.length; i++) {
-            if (this.jugador.colisiona(this.bombas[i])) {
+            if (this.jugador.colisiona(this.bombas[i]) && this.bombas[i].estado==estados.moviendo) {
                 this.bombasJugador++;
                 this.bombas.splice(i, 1);
+            }
+        }
+
+        //colisiones con explosion
+        for (var i=0;i<this.explosiones.length;i++){
+            if(this.jugador.colisiona(this.explosiones[i])){
+                this.jugador.golpeado();
+
+            }
+            for(var j = 0; j < this.enemigos.length; j++){
+                if(this.explosiones[i].colisiona(this.enemigos[j])){
+                    this.enemigos[i].impactado();
+                }
+            }
+            for(var j = 0; j < this.piedras.length; j++){
+                if(this.explosiones[i].colisiona(this.piedras[j])){
+                    this.espacio.eliminarCuerpoEstatico(this.piedras[j]);
+                    this.piedras.splice(j,1);
+                }
             }
         }
         // colisiones , disparoJugador - Enemigo
@@ -169,6 +209,9 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.bloques.length; i++) {
             this.bloques[i].dibujar(this.scrollX, this.scrollY);
         }
+        for (var i = 0; i < this.piedras.length; i++) {
+            this.piedras[i].dibujar(this.scrollX, this.scrollY);
+        }
         for (var i = 0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
         }
@@ -177,9 +220,15 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.bombas.length; i++) {
             this.bombas[i].dibujar(this.scrollX, this.scrollY);
         }
+        for (var i = 0; i < this.explosiones.length; i++) {
+            this.explosiones[i].dibujar(this.scrollX, this.scrollY);
+        }
         this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].dibujar(this.scrollX, this.scrollY);
+        }
+        for (var i = 0; i < this.explosiones.length; i++) {
+            this.explosiones[i].actualizar();
         }
 
         this.puertas.forEach(x => x.dibujar(this.scrollX, this.scrollY));
@@ -206,7 +255,7 @@ class GameLayer extends Layer {
 
             if (this.pad.contienePunto(pulsaciones[i].x, pulsaciones[i].y)) {
                 var orientacionX = this.pad.obtenerOrientacionX(pulsaciones[i].x);
-                if (orientacionX > 20) { // de 0 a 20 no contabilizamos
+                if (orientacionX > 20) { // de 0 a 20 no contabilizamosdw
                     controles.moverX = orientacionX;
                 }
                 if (orientacionX < -20) { // de -20 a 0 no contabilizamos
@@ -383,7 +432,7 @@ class GameLayer extends Layer {
                 var bloque = new Bloque(imagenes.bloque_tierra, x, y);
                 bloque.y = bloque.y - bloque.alto / 2;
                 // modificación para empezar a contar desde el suelo
-                this.bloques.push(bloque);
+                this.piedras.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);
                 break;
             case "V":
