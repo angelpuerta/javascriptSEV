@@ -9,13 +9,14 @@ class Jugador extends Modelo {
         this.orientacion = orientaciones.abajo;
         this.vx = 0; // velocidadX
         this.vy = 0; // velocidadY
+        this.arma = arma.distancia;
 
         // Animaciones
         this.aDispararDerecha = new Animacion(imagenes.jugador_idle_derecha,
             this.ancho, this.alto, 6, 1, this.finAnimacionDisparar.bind(this));
         this.aDispararIzquierda = new Animacion(imagenes.jugador_idle_izquierda,
             this.ancho, this.alto, 6, 1, this.finAnimacionDisparar.bind(this));
-        this.aDispararAbajo= new Animacion(imagenes.jugador_idle_abajo,
+        this.aDispararAbajo = new Animacion(imagenes.jugador_idle_abajo,
             this.ancho, this.alto, 6, 1, this.finAnimacionDisparar.bind(this));
         this.aDispararArriba = new Animacion(imagenes.jugador_idle_arriba,
             this.ancho, this.alto, 6, 1, this.finAnimacionDisparar.bind(this));
@@ -30,7 +31,7 @@ class Jugador extends Modelo {
             this.ancho, this.alto, 6, 1);
         this.aCorriendoDerecha =
             new Animacion(imagenes.jugador_corriendo_derecha,
-                this.ancho, this.alto, 8, 10,null);
+                this.ancho, this.alto, 8, 10, null);
         this.aCorriendoIzquierda = new Animacion(imagenes.jugador_corriendo_izquierda,
             this.ancho, this.alto, 8, 10, null);
         this.aCorriendoArriba = new Animacion(imagenes.jugador_corriendo_arriba,
@@ -55,15 +56,16 @@ class Jugador extends Modelo {
 
             reproducirEfecto(efectos.disparo);
 
-            var disparo = new DisparoJugador(this.x, this.y, this.orientacion);
+            var disparo = this.generarDisparo(this.x, this.y, this.orientacion);
             return disparo;
         } else {
             return null;
         }
     }
-    poneBomba(){
-        var bomba = new Bomba(imagenes.bomba,this.x,this.y);
-        bomba.estado=estados.explotando;
+
+    poneBomba() {
+        var bomba = new Bomba(imagenes.bomba, this.x, this.y);
+        bomba.estado = estados.explotando;
         return bomba;
     }
 
@@ -186,6 +188,24 @@ class Jugador extends Modelo {
 
     cambiarOrientacion(orientacion) {
         this.orientacion = orientacion;
+    }
+
+    cambiarArma(arma) {
+        this.arma = arma;
+    }
+
+    generarDisparo(x, y, orientacion) {
+        switch (this.arma) {
+            case arma.distancia:
+                return new DisparoJugador(x, y, orientacion);
+                break;
+            case arma.paralizante:
+                return new DisparoParalizante(x, y, orientacion);
+                break;
+            case arma.cuerpo:
+                return new AtaqueCuerpo(x, y, orientacion);
+                break;
+        }
     }
 
 }

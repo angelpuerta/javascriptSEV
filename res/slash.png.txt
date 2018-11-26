@@ -1,0 +1,1 @@
+slash_01.png.png 149 0, slash_02.png.png 317 0, slash_03.png.png 465 0, slash_04.png.png 619 2, slash_05.png.png 773 17.

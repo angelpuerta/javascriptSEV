@@ -22,7 +22,7 @@ class EnemigoDivisible extends BaseEnemigo {
     }
 
 
-    actualizar() {
+    factualizar() {
         // Actualizar animación
         this.animacion.actualizar();
 
@@ -38,12 +38,18 @@ class EnemigoDivisible extends BaseEnemigo {
             this.animacion = this.aMoverDrecha;
     }
 
-    impactado() {
-        if (this.vida > 0)
-            this.vida--;
+    impactado(x) {
+        if (x.stuneo > 0)
+            this.tiempoStuneo = x.stuneo;
+        if (this.vida - x.daño > 0)
+            this.vida = this.vida - x.daño;
         else {
             this.estado = estados.muerto;
             var enemigo_dividio = new EnemigoDividido(this.x, this.y);
+            this.ponerEnPantalla(enemigo_dividio);
+            gameLayer.enemigos.push(enemigo_dividio);
+            gameLayer.espacio.dinamicos.push(enemigo_dividio);
+            enemigo_dividio = new EnemigoDividido(this.x, this.y);
             this.ponerEnPantalla(enemigo_dividio);
             gameLayer.enemigos.push(enemigo_dividio);
             gameLayer.espacio.dinamicos.push(enemigo_dividio);
@@ -68,14 +74,14 @@ class EnemigoDivisible extends BaseEnemigo {
     ponerEnPantalla(hijo) {
         if (!(gameLayer === undefined || gameLayer.anchoMapa === undefined || gameLayer.altoMapa === undefined)) {
             var jugador = this;
-            hijo.x = 480*0.2 * (Math.random() - 0.5) + jugador.x;
-            hijo.y = 320*0.2 * (Math.random() - 0.5) + jugador.y;
+            hijo.x = 480 * 0.3 * (Math.random() - 0.5) + jugador.x;
+            hijo.y = 320 * 0.3 * (Math.random() - 0.5) + jugador.y;
             while (this.x < 32 || this.y < 40 ||
             this.x > gameLayer.anchoMapa || this.y > gameLayer.altoMapa ||
             gameLayer.espacio.estaticos.some(x => x.colisiona(this)) ||
-            gameLayer.espacio.dinamicos.some(x => x!==this && x.colisiona(this))) {
-                hijo.x = 480*0.2 * (Math.random() - 0.5) + jugador.x;
-                hijo.y = 320*0.2 * (Math.random() - 0.5) + jugador.y;
+            gameLayer.espacio.dinamicos.some(x => x !== this && x.colisiona(this))) {
+                hijo.x = 480 * 0.3 * (Math.random() - 0.5) + jugador.x;
+                hijo.y = 320 * 0.3 * (Math.random() - 0.5) + jugador.y;
             }
         }
     }

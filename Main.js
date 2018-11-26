@@ -10,6 +10,7 @@ var menuLayer;
 
 // Controles
 var controles = {};
+controles.arma = 0;
 
 // Inicio capas y bucle del juego
 function iniciarJuego() {
@@ -19,9 +20,9 @@ function iniciarJuego() {
     setInterval(loop, 1000 / 30);
 }
 
-function loop(){
+function loop() {
     layer.actualizar();
-    if ( entrada == entradas.pulsaciones) {
+    if (entrada == entradas.pulsaciones) {
         layer.calcularPulsaciones(pulsaciones);
     }
     layer.procesarControles();
@@ -42,8 +43,8 @@ function resize() {
 
     escaladoMinimo = Math.min(escaladoAncho, escaladoAlto);
 
-    canvas.width = this.canvas.width*escaladoMinimo;
-    canvas.height = this.canvas.height*escaladoMinimo;
+    canvas.width = this.canvas.width * escaladoMinimo;
+    canvas.height = this.canvas.height * escaladoMinimo;
 
-    contexto.scale(escaladoMinimo,escaladoMinimo);
+    contexto.scale(escaladoMinimo, escaladoMinimo);
 }

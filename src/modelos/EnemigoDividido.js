@@ -25,7 +25,7 @@ class EnemigoDividido extends BaseEnemigo {
     }
 
 
-    actualizar() {
+    factualizar() {
         // Actualizar animación
         this.animacion.actualizar();
 
@@ -41,13 +41,16 @@ class EnemigoDividido extends BaseEnemigo {
 
     }
 
-    impactado() {
+    impactado(x) {
         if (!(this.estado === estados.invencible)) {
-            if (this.vida > 0)
-                this.vida--;
+            if (x.stuneo > 0)
+                this.tiempoStuneo = x.stuneo;
+            if (this.vida - x.daño > 0)
+                this.vida = this.vida - x.daño;
             else
                 this.estado = estados.muerto;
         }
+
     }
 
 

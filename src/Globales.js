@@ -28,7 +28,7 @@ estados.impactado = 7;
 estados.invencible = 8;
 estados.enterrado = 9;
 estados.enterrandose = 10;
-estados.explotando=11;
+estados.explotando = 11;
 
 var orientaciones = {};
 orientaciones.arriba = 1;
@@ -47,6 +47,9 @@ TECLAS.ATAQUE_ARRIBA = 38;
 TECLAS.ATAQUE_ABAJO = 40;
 TECLAS.ATAQUE_DERECHA = 39;
 TECLAS.ATAQUE_IZQUIERDA = 37;
+TECLAS.ATAQUE_DISTANCIA = 49;
+TECLAS.ATAQUE_PARALIZANTE = 50;
+TECLAS.ATAQUE_CUERPO = 51;
 
 var pixel = {};
 pixel.alto = 32;
@@ -55,3 +58,8 @@ pixel.ancho = 40;
 var axis = {};
 axis.X = "X";
 axis.Y = "Y";
+
+var arma = {};
+arma.distancia = 1;
+arma.paralizante = 2;
+arma.cuerpo = 3;

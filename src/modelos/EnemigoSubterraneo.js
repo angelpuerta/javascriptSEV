@@ -18,12 +18,12 @@ class EnemigoSubterraneo extends BaseEnemigo {
 
         this.tiempoDuracion = 60;
         this.cadenciaEnterrando = 16;
-        this.cadenciaDescubierto = 60;
+        this.cadenciaDescubierto = 200;
         this.tiempoEnterrarse = 100;
 
     }
 
-    actualizar() {
+    factualizar() {
 
         this.animacion.actualizar();
 
@@ -98,19 +98,12 @@ class EnemigoSubterraneo extends BaseEnemigo {
             while (this.x < 32 || this.y < 40 ||
             this.x > gameLayer.anchoMapa || this.y > gameLayer.altoMapa ||
             gameLayer.espacio.estaticos.some(x => x.colisiona(this)) ||
-            gameLayer.espacio.dinamicos.some(x => x!==this && x.colisiona(this))) {
+            gameLayer.espacio.dinamicos.some(x => x !== this && x.colisiona(this))) {
                 this.x = 480 * (Math.random() - 0.5) + jugador.x;
                 this.y = 320 * (Math.random() - 0.5) + jugador.y;
             }
         }
     }
 
-
-    dibujar(scrollX, scrollY) {
-        scrollX = scrollX || 0;
-        scrollY = scrollY || 0;
-
-        this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
-    }
 
 }

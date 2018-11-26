@@ -40,6 +40,15 @@ function onKeyDown(event) {
             case TECLAS.IZQUIERDA:
                 controles.moverX = -1;
                 break;
+            case TECLAS.ATAQUE_DISTANCIA:
+                controles.arma = arma.distancia;
+                break;
+            case TECLAS.ATAQUE_PARALIZANTE:
+                controles.arma = arma.paralizante;
+                break;
+            case TECLAS.ATAQUE_CUERPO:
+                controles.arma = arma.cuerpo;
+                break;
         }
     }
 }
@@ -83,6 +92,12 @@ function onKeyUp(event) {
         case TECLAS.ATAQUE_IZQUIERDA:
             controles.disparo = 0;
             break;
+        case TECLAS.ATAQUE_DISTANCIA:
+        case TECLAS.ATAQUE_PARALIZANTE:
+        case TECLAS.ATAQUE_CUERPO:
+            controles.arma = 0;
+            break;
+
     }
 }
 

@@ -25,13 +25,10 @@ class AxisEnemigo extends BaseEnemigo {
         this.tiempoCubrise = 0;
         this.tiempoDuracion = 60;
 
-        if (this.axis == axis.X)
-            this.vx = this.vInteligencia;
-        else
-            this.vy = this.vInteligencia;
+
     }
 
-    actualizar() {
+    factualizar() {
         this.animacion.actualizar();
 
         if (this.estado === estados.invencible) {
@@ -41,6 +38,8 @@ class AxisEnemigo extends BaseEnemigo {
             this.actualizar_disparar();
             if (this.tiempoCubrise > this.cadenciaCubrise) {
                 this.estado = estados.invencible;
+                this.vx = 0;
+                this.vy = 0;
                 this.animacion = this.aCubrir;
                 this.tiempoCubrise = 0;
             }
@@ -53,6 +52,7 @@ class AxisEnemigo extends BaseEnemigo {
             this.estado = estados.moviendo;
             this.tiempoCubrise = 0;
             this.animacion = this.aMover;
+            this.restaurarVelocidad();
         }
     }
 
@@ -96,10 +96,12 @@ class AxisEnemigo extends BaseEnemigo {
     }
 
 
-    impactado() {
+    impactado(x) {
         if (this.estado != estados.invencible) {
-            if (this.vida > 0)
-                this.vida--;
+            if (x.stuneo > 0)
+                this.tiempoStuneo = x.stuneo;
+            if (this.vida - x.daño > 0)
+                this.vida = this.vida - x.daño;
             else
                 this.estado = estados.muerto;
         }
@@ -109,5 +111,11 @@ class AxisEnemigo extends BaseEnemigo {
         return (Math.abs(jugador.x - this.x) < 480 * 0.6 && Math.abs(jugador.y - this.y) < 320 * 0.6);
     }
 
+    restaurarVelocidad() {
+        if (this.axis == axis.X)
+            this.vx = this.vInteligencia;
+        else
+            this.vy = this.vInteligencia;
+    }
 
 }

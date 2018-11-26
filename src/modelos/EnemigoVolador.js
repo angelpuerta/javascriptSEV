@@ -14,14 +14,15 @@ class EnemigoVolador extends BaseEnemigo {
         this.start_vx = 2;
         this.start_vy = 2;
 
-        this.vida = 1;
+        this.vida = 2;
 
         this.vy = this.start_vx;
         this.vx = this.start_vy;
+
     }
 
 
-    actualizar() {
+    factualizar() {
         // Actualizar animación
         this.animacion.actualizar();
 
