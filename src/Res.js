@@ -60,7 +60,9 @@ var imagenes = {
     explosion: "res/explosion.png",
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
-    ataque_cuerpo: "res/slash.png"
+    ataque_cuerpo: "res/slash.png",
+    boss_dukeofflies: "res/Bosses/boss_dukeofflies.png",
+    boss_dukeofflies_animacion: "res/Bosses/boss_dukeofflies_animacion.png"
 };
 
 var rutasImagenes = Object.values(imagenes);

@@ -421,6 +421,13 @@ class GameLayer extends Layer {
                 this.bombas.push(bomba);
                 this.espacio.agregarCuerpoDinamico(bomba);
                 break;
+            case "b":
+                var enemigo = new Boss(x, y);
+                enemigo.y = enemigo.y - enemigo.alto / 2;
+                // modificación para empezar a contar desde el suelo
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {
                     var nextLevel = parseInt(simbolo, 10);
