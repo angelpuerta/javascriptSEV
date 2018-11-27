@@ -456,21 +456,35 @@ class GameLayer extends Layer {
 
     ponerParedes(lineas) {
         var bloque, x, y;
-        for (var i = 0; i < lineas[0].length + 1; i++) {
-            x = -40 / 2 + i * 40;
+
+
+        for (var i = 1; i <= lineas[0].length + 1; i++) {
+            x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
-            this.agregarBloque(new Bloque(imagenes.pared, x, y));
+            this.agregarBloque(new Bloque(imagenes.paredB, x, y));
             y = 32 / 2;
             this.agregarBloque(new Bloque(imagenes.pared, x, y));
 
         }
-        for (var i = 0; i < lineas.length + 1; i++) {
-            x = -40 / 2;
+        for (var i = 1; i < lineas.length ; i++) {
+            x = -30 / 2;
             y = 32 / 2 + i * 32;
-            this.agregarBloque(new Bloque(imagenes.pared, x, y));
-            x = this.anchoMapa + 40 * 3 / 2;
-            this.agregarBloque(new Bloque(imagenes.pared, x, y));
+            this.agregarBloque(new Bloque(imagenes.paredI, x, y));
+            x = this.anchoMapa + 55;
+            this.agregarBloque(new Bloque(imagenes.paredD, x, y));
         }
+        x= -10;
+        y = 23;
+        this.agregarBloque(new Bloque(imagenes.paredAI, x, y));
+        x=this.anchoMapa+50;
+        y = 23;
+        this.agregarBloque(new Bloque(imagenes.paredAD, x, y));
+        x= -10;
+        y = this.altoMapa + 42;
+        this.agregarBloque(new Bloque(imagenes.paredBI, x, y));
+        x=this.anchoMapa+50;
+        y = this.altoMapa + 42;
+        this.agregarBloque(new Bloque(imagenes.paredBD, x, y));
     }
 
     agregarBloque(bloque) {
@@ -500,7 +514,10 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(this.jugador);
                 break;
             case "#":
-                var bloque = new Bloque(imagenes.bloque_tierra, x, y);
+                var r=Math.random()*3;
+                if(r>2) var bloque = new Bloque(imagenes.piedra1, x, y);
+                else if(r>1) var bloque = new Bloque(imagenes.piedra2, x, y);
+                else var bloque = new Bloque(imagenes.piedra3, x, y);
                 bloque.y = bloque.y - bloque.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.piedras.push(bloque);
