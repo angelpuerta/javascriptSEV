@@ -1,6 +1,6 @@
 class Bomba extends Modelo {
 
-    constructor(rutaImagen, x, y,explota) {
+    constructor(rutaImagen, x, y) {
         super(rutaImagen, x, y)
         this.aExplotar= new Animacion(imagenes.bomba_explota,this.ancho,this.alto,6,4,this.finAnimacionExplotar.bind(this));
         this.aParada=new Animacion(imagenes.bomba,this.ancho,this.alto,1,1);
