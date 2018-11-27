@@ -1,4 +1,4 @@
-class DisparoJugador extends Modelo {
+class DisparoJugador extends DisparoBase {
 
     constructor(x, y, orientacion) {
         super(imagenes.disparo_jugador, x, y)
@@ -8,7 +8,7 @@ class DisparoJugador extends Modelo {
         this.orientar(orientacion);
     }
 
-    orientar(orientacion){
+    orientar(orientacion) {
         switch (orientacion) {
             case orientaciones.arriba:
                 this.vy = this.velocidad * -1;
@@ -25,7 +25,7 @@ class DisparoJugador extends Modelo {
         }
     }
 
-    actualizar(){
+    actualizar() {
 
     }
 
