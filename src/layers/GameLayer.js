@@ -1,3 +1,5 @@
+
+
 class GameLayer extends Layer {
 
     constructor() {
@@ -22,7 +24,7 @@ class GameLayer extends Layer {
 
         this.scrollX = 0;
         this.scrollY = 0;
-        this.bombasJugador = 1;
+        this.bombasJugador = 100;
         this.bloques = [];
         this.piedras = [];
         this.corazones = [];
@@ -36,6 +38,7 @@ class GameLayer extends Layer {
         this.disparosJugador = [];
         this.disparosEnemigo = [];
 
+        this.daño=1;
         this.enemigos = [];
 
         this.bombas = [];
@@ -130,7 +133,7 @@ class GameLayer extends Layer {
             }
             for (var j = 0; j < this.enemigos.length; j++) {
                 if (this.explosiones[i].colisiona(this.enemigos[j])) {
-                    this.enemigos[i].impactado();
+                    this.enemigos[i].estado=estados.muerto;
                 }
             }
             for (var j = 0; j < this.piedras.length; j++) {
@@ -369,12 +372,13 @@ class GameLayer extends Layer {
         }
         if (controles.bomba) {
             if (this.bombasJugador > 0) {
-                this.bombasJugador--
+
                 var nuevaBomba = this.jugador.poneBomba();
                 if (nuevaBomba != null) {
                     this.espacio.agregarCuerpoDinamico(nuevaBomba);
                     this.bombas.push(nuevaBomba);
                 }
+                this.bombasJugador--
                 controles.bomba = false;
             }
         }
@@ -438,7 +442,7 @@ class GameLayer extends Layer {
             this.anchoMapa = (lineas[0].length - 1) * 40;
             this.altoMapa = (lineas.length - 1) * 32;
             this.ponerParedes(lineas);
-            for (var i = 1; i < lineas.length; i++) {
+            for (var i = 0; i < lineas.length; i++) {
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++) {
                     var simbolo = linea[j];
@@ -462,11 +466,11 @@ class GameLayer extends Layer {
             x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
             this.agregarBloque(new Bloque(imagenes.paredB, x, y));
-            y = 32 / 2;
+            y = -32 / 2;
             this.agregarBloque(new Bloque(imagenes.pared, x, y));
 
         }
-        for (var i = 1; i < lineas.length ; i++) {
+        for (var i = 0; i < lineas.length ; i++) {
             x = -30 / 2;
             y = 32 / 2 + i * 32;
             this.agregarBloque(new Bloque(imagenes.paredI, x, y));
@@ -474,10 +478,10 @@ class GameLayer extends Layer {
             this.agregarBloque(new Bloque(imagenes.paredD, x, y));
         }
         x= -10;
-        y = 23;
+        y = -10;
         this.agregarBloque(new Bloque(imagenes.paredAI, x, y));
         x=this.anchoMapa+50;
-        y = 23;
+        y = -10;
         this.agregarBloque(new Bloque(imagenes.paredAD, x, y));
         x= -10;
         y = this.altoMapa + 42;
@@ -575,13 +579,26 @@ class GameLayer extends Layer {
                 break;
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {
+
                     var nextLevel = parseInt(simbolo, 10);
-                    var puerta = new Puerta(x, y, nextLevel);
-                    this.puertas.push(puerta);
-                    this.espacio.agregarCuerpoEstatico(puerta)
+                    this.ponePuerta(x,y,nextLevel);
+
                 }
                 break;
         }
+
+
+    }
+    ponePuerta(x,y,nextLevel) {
+
+        if(y==this.altoMapa+32)var puerta = new Puerta(imagenes.puerta_abajo_cerrada,imagenes.puerta_abajo_abierta,x, y+15, nextLevel);
+        if(y==32)var puerta = new Puerta(imagenes.puerta_arriba_cerrada,imagenes.puerta_arriba_abierta,x, y-48, nextLevel);
+        if(x==this.anchoMapa-20)var puerta = new Puerta(imagenes.puerta_derecha_cerrada,imagenes.puerta_derecha_abierta,x+75, y, nextLevel);
+        if(x==20)var puerta = new Puerta(imagenes.puerta_izquierda_cerrada,imagenes.puerta_izquierda_abierta,x-35, y, nextLevel);
+       // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
+        this.puertas.push(puerta);
+        this.espacio.agregarCuerpoEstatico(puerta)
+
 
     }
 

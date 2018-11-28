@@ -4,7 +4,7 @@ class Bomba extends Modelo {
         super(rutaImagen, x, y)
         this.aExplotar= new Animacion(imagenes.bomba_explota,this.ancho,this.alto,6,4,this.finAnimacionExplotar.bind(this));
         this.aParada=new Animacion(imagenes.bomba,this.ancho,this.alto,1,1);
-        this.aExplotado=new Animacion(imagenes.explosion,this.ancho,this.alto,3,12);
+
         this.animacion=this.aParada;
         this.estado=estados.moviendo;
     }

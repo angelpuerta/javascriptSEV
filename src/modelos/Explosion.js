@@ -30,6 +30,19 @@ class Explosion extends Modelo {
 
         this.aExplotar.dibujar(this.x - scrollX, this.y - scrollY);
     }
+    colisiona (modelo){
+        var colisiona = false;
+
+        if ( modelo.x - modelo.ancho/2 <=  this.x + this.imagen.width/2
+            && modelo.x + modelo.ancho/2 >= this.x - this.imagen.width/2
+            && this.y + this.imagen.height/2 >= modelo.y - modelo.alto/2
+            && this.y - this.imagen.height/2 <= modelo.y + modelo.alto/2 ){
+
+            colisiona = true;
+
+        }
+        return colisiona;
+    }
 
 
 

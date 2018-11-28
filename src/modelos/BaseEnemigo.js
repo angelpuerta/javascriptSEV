@@ -39,12 +39,15 @@ class BaseEnemigo extends Modelo {
     }
 
     impactado(x) {
+        if(x!=null){
         if (x.stuneo > 0)
             this.tiempoStuneo = x.stuneo;
         if (this.vida - x.daño > 0)
             this.vida = this.vida - x.daño;
         else
-            this.estado = estados.muerto;
+            this.estado = estados.muerto;}
+
+            else this.estado=estados.muerto;
     }
 
     alcanzaJugador() {

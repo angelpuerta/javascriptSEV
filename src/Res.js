@@ -11,8 +11,6 @@ var imagenes = {
 
     disparo_enemigo: "res/disparo_enemigo.png",
     icono_puntos: "res/icono_puntos.png",
-    icono_vidas: "res/icono_vidas.png",
-    icono_recolectable: "res/icono_recolectable.png",
     fondo_2: "res/fondo_3.png",
     jugador_idle_derecha: "res/iddle-caminando-derecha.png",
     jugador_idle_izquierda: "res/iddle-caminando-izquierda.png",
@@ -22,7 +20,6 @@ var imagenes = {
     jugador_corriendo_izquierda: "res/caminando-izquierda.png",
     jugador_corriendo_arriba: "res/camina-atras.png",
     jugador_corriendo_abajo: "res/camina-alante.png",
-    enemigo_correr_izquierda: "res/enemigo_correr_izquierda.png",
     suelo: "res/suelo.png",
     enemigo_morir: "res/enemigo_morir.png",
     piedra1: "res/piedra1.png",
@@ -37,20 +34,29 @@ var imagenes = {
     paredAI: "res/paredeai.png",
     paredBI: "res/paredbi.png",
     bloque_tierra: "res/pared.png",
-    bloque_metal: "res/bloque_metal.png",
-    bloque_fondo_muro: "res/bloque_fondo_muro.png",
+
     copa: "res/copa.png",
-    pad: "res/pad.png",
-    boton_disparo: "res/boton_disparo.png",
-    boton_salto: "res/boton_salto.png",
-    boton_pausa: "res/boton_pausa.png",
+
+
+
     menu_fondo: "res/menu_fondo.png",
     boton_jugar: "res/boton_jugar.png",
     mensaje_como_jugar: "res/mensaje_como_jugar.png",
     mensaje_ganar: "res/mensaje_ganar.png",
     mensaje_perder: "res/mensaje_perder.png",
-    puerta_abierta: "res/open_door.png",
-    puerta_cerrada: "res/closed_door.png",
+
+    puerta_arriba_abierta: "res/puerta_arriba_cerrada.png",
+    puerta_arriba_cerrada: "res/puerta_arriba.png",
+
+    puerta_abajo_abierta: "res/puerta_abajo_cerrada.png",
+    puerta_abajo_cerrada: "res/puerta_abajo.png",
+
+    puerta_derecha_abierta: "res/puerta_derecha_cerrada.png",
+    puerta_derecha_cerrada: "res/puerta_derecha.png",
+
+    puerta_izquierda_abierta: "res/puerta_izquierda_cerrada.png",
+    puerta_izquierda_cerrada: "res/puerta_izquierda.png",
+
     enemigo_vuela_izquierda: "res/enemigos/persiguevuela_izquierda.png",
     enemigo_vuela_derecha: "res/enemigos/persiguevuela_derecha.png",
     enemigo_vuela: "res/enemigos/enemigo_vuela.png",
@@ -68,10 +74,11 @@ var imagenes = {
     bomba: "res/bomba.png",
     bomba_explota: "res/bombaexplota.png",
     explosion: "res/explosion.png",
+    icono_explosion:"res/icono_explosion.png",
     vida_llena:"res/vida_llena.png",
     vida_media:"res/vida_media.png",
     vida_vacia:"res/vida_vacia.png",
-    icono_explosion: "res/icono_explosion.png",
+
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
     ataque_cuerpo: "res/slash.png",

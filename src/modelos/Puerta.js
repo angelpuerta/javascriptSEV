@@ -1,15 +1,16 @@
 class Puerta extends Modelo {
 
-    constructor(x, y, next_door) {
-        super(imagenes.puerta_cerrada, x, y);
+    constructor(imagen,imagen2,x, y, next_door) {
+        super(imagen, x, y);
         this.opened = false;
         this.next_door = next_door;
+        this.imagen2=imagen2;
     }
 
     open(){
         this.opened = true;
         this.imagen = new Image();
-        this.imagen.src = imagenes.puerta_abierta;
+        this.imagen.src=this.imagen2;
         super.imagen = this.imagen;
     }
 
@@ -20,4 +21,5 @@ class Puerta extends Modelo {
     isOpen(){
         return this.opened;
     }
+
 }
