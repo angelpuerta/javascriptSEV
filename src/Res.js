@@ -79,6 +79,12 @@ var imagenes = {
     vida_media:"res/vida_media.png",
     vida_vacia:"res/vida_vacia.png",
 
+    pudaño:"res/pudaño.png",
+    pucadencia:"res/pucadencia.png",
+    puvelocidad:"res/puvelocidad.png",
+    cadencia:"res/cadencia.png",
+    daño:"res/daño.png",
+    velocidad:"res/velocidad.png",
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
     ataque_cuerpo: "res/slash.png",

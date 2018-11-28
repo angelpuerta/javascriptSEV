@@ -24,7 +24,7 @@ class Espacio {
     moverAbajo(i){
         if ( this.dinamicos[i].vy > 0){
             var movimientoPosible = this.dinamicos[i].vy;
-            // El mejor "idealmente" es la velocidad vy.
+            // El mejor "idealmente" es la velocidadIcono vy.
 
             for(var j=0; j < this.estaticos.length; j++){
                 var arribaDinamico
@@ -84,7 +84,7 @@ class Espacio {
     moverArriba(i){
         if ( this.dinamicos[i].vy < 0){
             var movimientoPosible = this.dinamicos[i].vy;
-            // El mejor "idealmente" es la velocidad vy.
+            // El mejor "idealmente" es la velocidadIcono vy.
 
             for(var j=0; j < this.estaticos.length; j++){
                 var arribaDinamico
@@ -170,7 +170,7 @@ class Espacio {
     // Izquierda
     if ( this.dinamicos[i].vx < 0){
         var movimientoPosible = this.dinamicos[i].vx;
-        // El mejor "idealmente" es la velocidad vx.
+        // El mejor "idealmente" es la velocidadIcono vx.
 
         for(var j=0; j < this.estaticos.length; j++){
             var izquierdaDinamico

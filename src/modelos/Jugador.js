@@ -7,6 +7,7 @@ class Jugador extends Modelo {
 
         this.estado = estados.moviendo;
         this.orientacion = orientaciones.abajo;
+        this.v=3;
         this.vx = 0; // velocidadX
         this.vy = 0; // velocidadY
         this.arma = arma.distancia;
@@ -179,11 +180,11 @@ class Jugador extends Modelo {
     }
 
     moverX(direccion) {
-        this.vx = direccion * 3;
+        this.vx = direccion * this.v;
     }
 
     moverY(direccion) {
-        this.vy = direccion * 3;
+        this.vy = direccion * this.v;
     }
 
     cambiarOrientacion(orientacion) {

@@ -1,9 +1,10 @@
 
-var musicaAmbiente = new Audio("res/musica_ambiente.mp3");
+var musicaAmbiente = new Audio("res/musica_ambiente.ogg");
+musicaAmbiente.volume=0.1;
 musicaAmbiente.loop = true;
 
 var efectos = {
-    disparo : "res/efecto_disparo.mp3",
+    disparo : "res/efecto_disparo.wav",
     explosion : "res/efecto_explosion.mp3",
 }
 
