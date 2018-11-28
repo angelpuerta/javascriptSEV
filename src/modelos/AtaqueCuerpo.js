@@ -1,10 +1,10 @@
 class AtaqueCuerpo extends DisparoBase {
 
-    constructor(x, y, orientacion) {
+    constructor(x, y, orientacion,daño) {
         super(imagenes.ataque_cuerpo, x, y, orientacion);
         this.animacion = new Animacion(imagenes.ataque_cuerpo_animacion,
             this.ancho, this.alto, 2, 5);
-        this.daño = 2;
+        this.daño = 2*daño;
         this.velocidad = 5;
         this.orientar(orientacion);
         this.tiempoParar = 10;

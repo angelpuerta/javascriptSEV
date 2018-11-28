@@ -35,7 +35,7 @@ class GameLayer extends Layer {
         this.powerups=[];
         this.daño=1;
         this.velocidad=this.jugador.v;
-        this.cadencia=1;
+        this.cadencia=this.jugador.cadenciaDisparo;
         this.dañoTexto=new Texto(this.daño,480*0.1,320*0.22);
         this.velocidadTexto=new Texto(this.velocidad,480*0.1,320*0.32);
         this.cadenciaTexto=new Texto(this.cadencia,480*0.1,320*0.42);
@@ -60,7 +60,7 @@ class GameLayer extends Layer {
 
 
 
-        this.cargarMapa("res/" + 2 + ".txt");
+        this.cargarMapa("res/" + 0 + ".txt");
     }
 
     actualizar() {
@@ -77,6 +77,9 @@ class GameLayer extends Layer {
         this.enemigos.forEach(x => x.actualizar());
         this.disparosJugador.forEach(x => x.actualizar());
         this.disparosEnemigo.forEach(x => x.actualizar());
+        this.cadenciaTexto.valor=this.jugador.cadenciaDisparo;
+        this.velocidadTexto.valor=this.jugador.v;
+        this.dañoTexto.valor=this.jugador.daño;
 
         for (var i = 0; i < this.disparosEnemigo.length; i++) {
             if (this.disparosEnemigo[i] != null && this.disparosEnemigo[i].colisiona(this.jugador)) {
@@ -139,10 +142,22 @@ class GameLayer extends Layer {
         }
         for (var i = 0; i < this.powerups.length; i++) {
             if (this.jugador.colisiona(this.powerups[i])) {
-                this.powerups.splice(i,1);
-                this.jugador.v=this.jugador.v*1.5;
+
+
+                if(this.powerups[i].tipo==0){
+
+                    this.jugador.v=this.jugador.v*1.5;
                 if(this.jugador.v>6)
                     this.jugador.v=6;
+
+                }
+                else if(this.powerups[i].tipo==1){
+                    this.jugador.daño=this.jugador.daño*2;
+                }
+                else if(this.powerups[i].tipo==2){
+                    this.jugador.cadenciaDisparo=this.jugador.cadenciaDisparo-7;
+                }
+                this.powerups.splice(i,1);
             }
         }
 
@@ -616,21 +631,21 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(corazon);
                 break;
             case "ñ":
-                var pudaño = new Modelo(imagenes.pudaño, x, y);
+                var pudaño = new PowerUp(imagenes.pudaño, x, y,1);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
                 this.espacio.agregarCuerpoDinamico(pudaño);
                 break;
             case "v":
-                var pudaño = new Modelo(imagenes.puvelocidad, x, y);
+                var pudaño = new PowerUp(imagenes.puvelocidad, x, y,0);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
                 this.espacio.agregarCuerpoDinamico(pudaño);
                 break;
             case "n":
-                var pudaño = new Modelo(imagenes.pucadencia, x, y);
+                var pudaño = new PowerUp(imagenes.pucadencia, x, y,2);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
