@@ -21,6 +21,12 @@ class BaseEnemigo extends Modelo {
         }
         else
             this.factualizar();
+        if (this.alcanzaJugador()) {
+            this.vx = 0;
+            this.vy = 0;
+            this.tiempoStuneo++;
+            this.animacion.actualizar();
+        }
 
     }
 
@@ -39,6 +45,10 @@ class BaseEnemigo extends Modelo {
             this.vida = this.vida - x.daño;
         else
             this.estado = estados.muerto;
+    }
+
+    alcanzaJugador() {
+        return gameLayer.jugador.colisiona(this);
     }
 
 
