@@ -33,6 +33,6 @@ class DisparoBase extends Modelo {
 
 
     matarDisparo() {
-        return (this.vx == 0 && this.vy == 0 || !this.estaEnPantalla());
+        return (this.vx == 0 && this.vy == 0 || !this.estaEnPantalla() || this.choca);
     }
 }

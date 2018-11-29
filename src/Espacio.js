@@ -1,12 +1,13 @@
 class Espacio {
 
-    constructor() {;
+    constructor() {
+        ;
         this.dinamicos = [];
         this.estaticos = [];
     }
 
-    actualizar(){
-        for( var i=0; i < this.dinamicos.length; i++){
+    actualizar() {
+        for (var i = 0; i < this.dinamicos.length; i++) {
 
             // reiniciar choques
             this.dinamicos[i].choqueAbajo = false;
@@ -21,34 +22,35 @@ class Espacio {
         }
     }
 
-    moverAbajo(i){
-        if ( this.dinamicos[i].vy > 0){
+    moverAbajo(i) {
+        if (this.dinamicos[i].vy > 0) {
             var movimientoPosible = this.dinamicos[i].vy;
             // El mejor "idealmente" es la velocidad vy.
 
-            for(var j=0; j < this.estaticos.length; j++){
+            for (var j = 0; j < this.estaticos.length; j++) {
                 var arribaDinamico
-                    = this.dinamicos[i].y - this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y - this.dinamicos[i].alto / 2;
                 var abajoDinamico
-                    = this.dinamicos[i].y + this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y + this.dinamicos[i].alto / 2;
                 var derechaDinamico
-                    = this.dinamicos[i].x + this.dinamicos[i].ancho/2;
+                    = this.dinamicos[i].x + this.dinamicos[i].ancho / 2;
                 var izquierdaDinamico
-                    = this.dinamicos[i].x - this.dinamicos[i].ancho/2;
+                    = this.dinamicos[i].x - this.dinamicos[i].ancho / 2;
                 var arribaEstatico
-                    = this.estaticos[j].y - this.estaticos[j].alto/2;
+                    = this.estaticos[j].y - this.estaticos[j].alto / 2;
                 var abajoEstatico
-                    = this.estaticos[j].y + this.estaticos[j].alto/2;
+                    = this.estaticos[j].y + this.estaticos[j].alto / 2;
                 var derechaEstatico
-                    = this.estaticos[j].x + this.estaticos[j].ancho/2;
+                    = this.estaticos[j].x + this.estaticos[j].ancho / 2;
                 var izquierdaEstatico
-                    = this.estaticos[j].x - this.estaticos[j].ancho/2;
+                    = this.estaticos[j].x - this.estaticos[j].ancho / 2;
 
                 // Choca!!
-                if ( (abajoDinamico +  this.dinamicos[i].vy) >= arribaEstatico &&
-                    (arribaDinamico +  this.dinamicos[i].vy) < abajoEstatico
+                if ((abajoDinamico + this.dinamicos[i].vy) >= arribaEstatico &&
+                    (arribaDinamico + this.dinamicos[i].vy) < abajoEstatico
                     && izquierdaDinamico < derechaEstatico
-                    && derechaDinamico > izquierdaEstatico ){
+                    && derechaDinamico > izquierdaEstatico) {
+
 
                     if (derechaDinamico < derechaEstatico) {
                         this.dinamicos[i].fueraPorDerecha = false;
@@ -58,9 +60,11 @@ class Espacio {
                         this.dinamicos[i].fueraPorIzquierda = false;
                     }
 
-                    if (movimientoPosible >= arribaEstatico - abajoDinamico ){
+                    if (movimientoPosible >= arribaEstatico - abajoDinamico) {
                         // Más restrictivo que el anterior!
-                        movimientoPosible = arribaEstatico - abajoDinamico  ;
+                        this.choque(this.dinamicos[i]);
+
+                        movimientoPosible = arribaEstatico - abajoDinamico;
                         this.dinamicos[i].choqueAbajo = true;
 
                         if (derechaDinamico <= derechaEstatico) {
@@ -81,40 +85,42 @@ class Espacio {
         }
     }
 
-    moverArriba(i){
-        if ( this.dinamicos[i].vy < 0){
+    moverArriba(i) {
+        if (this.dinamicos[i].vy < 0) {
             var movimientoPosible = this.dinamicos[i].vy;
             // El mejor "idealmente" es la velocidad vy.
 
-            for(var j=0; j < this.estaticos.length; j++){
+            for (var j = 0; j < this.estaticos.length; j++) {
                 var arribaDinamico
-                    = this.dinamicos[i].y - this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y - this.dinamicos[i].alto / 2;
                 var abajoDinamico
-                    = this.dinamicos[i].y + this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y + this.dinamicos[i].alto / 2;
                 var derechaDinamico
-                    = this.dinamicos[i].x + this.dinamicos[i].ancho/2;
+                    = this.dinamicos[i].x + this.dinamicos[i].ancho / 2;
                 var izquierdaDinamico
-                    = this.dinamicos[i].x - this.dinamicos[i].ancho/2;
+                    = this.dinamicos[i].x - this.dinamicos[i].ancho / 2;
                 var arribaEstatico
-                    = this.estaticos[j].y - this.estaticos[j].alto/2;
+                    = this.estaticos[j].y - this.estaticos[j].alto / 2;
                 var abajoEstatico
-                    = this.estaticos[j].y + this.estaticos[j].alto/2;
+                    = this.estaticos[j].y + this.estaticos[j].alto / 2;
                 var derechaEstatico
-                    = this.estaticos[j].x + this.estaticos[j].ancho/2;
+                    = this.estaticos[j].x + this.estaticos[j].ancho / 2;
                 var izquierdaEstatico
-                    = this.estaticos[j].x - this.estaticos[j].ancho/2;
+                    = this.estaticos[j].x - this.estaticos[j].ancho / 2;
 
                 // Choca!!, forzar x a la izquierda del estatico
-                if ( (arribaDinamico +  this.dinamicos[i].vy) <= abajoEstatico &&
-                    (abajoDinamico +  this.dinamicos[i].vy) > arribaEstatico
+                if ((arribaDinamico + this.dinamicos[i].vy) <= abajoEstatico &&
+                    (abajoDinamico + this.dinamicos[i].vy) > arribaEstatico
                     && izquierdaDinamico < derechaEstatico
-                    && derechaDinamico > izquierdaEstatico ){
+                    && derechaDinamico > izquierdaEstatico) {
 
                     if (movimientoPosible >=
-                        (arribaDinamico + this.dinamicos[i].vy) - abajoEstatico ){
+                        (arribaDinamico + this.dinamicos[i].vy) - abajoEstatico) {
                         // Más restrictivo que el anterior!
+                        this.choque(this.dinamicos[i]);
+
                         movimientoPosible = abajoEstatico - arribaDinamico;
-                        if(movimientoPosible>0)
+                        if (movimientoPosible > 0)
                             movimientoPosible = 0;
                     }
 
@@ -126,34 +132,37 @@ class Espacio {
         }
     }
 
-    moverDerecha(i){
-        if ( this.dinamicos[i].vx > 0){
+    moverDerecha(i) {
+        if (this.dinamicos[i].vx > 0) {
             var movimientoPosible = this.dinamicos[i].vx;
             // El mejor "idealmente" es la x+vx.
 
-            for(var j=0; j < this.estaticos.length; j++){
+            for (var j = 0; j < this.estaticos.length; j++) {
                 var derechaDinamico
-                    = this.dinamicos[i].x + this.dinamicos[i].ancho/2;
+                    = this.dinamicos[i].x + this.dinamicos[i].ancho / 2;
                 var arribaDinamico
-                    = this.dinamicos[i].y - this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y - this.dinamicos[i].alto / 2;
                 var abajoDinamico
-                    = this.dinamicos[i].y + this.dinamicos[i].alto/2;
+                    = this.dinamicos[i].y + this.dinamicos[i].alto / 2;
                 var izquierdaEstatico
-                    = this.estaticos[j].x - this.estaticos[j].ancho/2;
+                    = this.estaticos[j].x - this.estaticos[j].ancho / 2;
                 var arribaEstatico
-                    = this.estaticos[j].y - this.estaticos[j].alto/2;
+                    = this.estaticos[j].y - this.estaticos[j].alto / 2;
                 var abajoEstatico
-                    = this.estaticos[j].y + this.estaticos[j].alto/2;
+                    = this.estaticos[j].y + this.estaticos[j].alto / 2;
 
                 // Choca!!, forzar x a la izquierda del estatico
-                if ( (derechaDinamico + this.dinamicos[i].vx) >= izquierdaEstatico
+                if ((derechaDinamico + this.dinamicos[i].vx) >= izquierdaEstatico
                     && arribaEstatico < abajoDinamico
-                    && abajoEstatico > arribaDinamico ){
+                    && abajoEstatico > arribaDinamico) {
+
 
                     if (movimientoPosible >=
-                        (derechaDinamico + this.dinamicos[i].vx) - izquierdaEstatico ){
+                        (derechaDinamico + this.dinamicos[i].vx) - izquierdaEstatico) {
                         // Se mueve menos que su vx porque no hay distancia
-                        movimientoPosible = izquierdaEstatico - derechaDinamico ;
+                        this.choque(this.dinamicos[i]);
+
+                        movimientoPosible = izquierdaEstatico - derechaDinamico;
                     }
 
                 }
@@ -165,56 +174,59 @@ class Espacio {
     }
 
 
-    moverIzquierda(i){
+    moverIzquierda(i) {
 
-    // Izquierda
-    if ( this.dinamicos[i].vx < 0){
-        var movimientoPosible = this.dinamicos[i].vx;
-        // El mejor "idealmente" es la velocidad vx.
+        // Izquierda
+        if (this.dinamicos[i].vx < 0) {
+            var movimientoPosible = this.dinamicos[i].vx;
+            // El mejor "idealmente" es la velocidad vx.
 
-        for(var j=0; j < this.estaticos.length; j++){
-            var izquierdaDinamico
-                = this.dinamicos[i].x - this.dinamicos[i].ancho/2;
-            var arribaDinamico
-                = this.dinamicos[i].y - this.dinamicos[i].alto/2;
-            var abajoDinamico
-                = this.dinamicos[i].y + this.dinamicos[i].alto/2;
-            var derechaEstatico
-                = this.estaticos[j].x + this.estaticos[j].ancho/2;
-            var arribaEstatico
-                = this.estaticos[j].y - this.estaticos[j].alto/2;
-            var abajoEstatico
-                = this.estaticos[j].y + this.estaticos[j].alto/2;
-            // Choca!!, forzar x a la izquierda del estatico
-            if ( (izquierdaDinamico + this.dinamicos[i].vx) <= derechaEstatico
-                && arribaEstatico < abajoDinamico
-                && abajoEstatico > arribaDinamico ){
+            for (var j = 0; j < this.estaticos.length; j++) {
+                var izquierdaDinamico
+                    = this.dinamicos[i].x - this.dinamicos[i].ancho / 2;
+                var arribaDinamico
+                    = this.dinamicos[i].y - this.dinamicos[i].alto / 2;
+                var abajoDinamico
+                    = this.dinamicos[i].y + this.dinamicos[i].alto / 2;
+                var derechaEstatico
+                    = this.estaticos[j].x + this.estaticos[j].ancho / 2;
+                var arribaEstatico
+                    = this.estaticos[j].y - this.estaticos[j].alto / 2;
+                var abajoEstatico
+                    = this.estaticos[j].y + this.estaticos[j].alto / 2;
+                // Choca!!, forzar x a la izquierda del estatico
+                if ((izquierdaDinamico + this.dinamicos[i].vx) <= derechaEstatico
+                    && arribaEstatico < abajoDinamico
+                    && abajoEstatico > arribaDinamico) {
 
-                if (movimientoPosible <=
-                    (izquierdaDinamico+this.dinamicos[i].vx)-derechaEstatico ){
-                    // Más restrictivo que el anterior!
-                    movimientoPosible = derechaEstatico - izquierdaDinamico ;
+
+                    if (movimientoPosible <=
+                        (izquierdaDinamico + this.dinamicos[i].vx) - derechaEstatico) {
+                        // Más restrictivo que el anterior!
+                        this.choque(this.dinamicos[i]);
+
+                        movimientoPosible = derechaEstatico - izquierdaDinamico;
+                    }
+
                 }
-
             }
+
+            // Ya se han comprobado todos los estaticos
+            this.dinamicos[i].x = this.dinamicos[i].x + movimientoPosible;
+            this.dinamicos[i].vx = movimientoPosible;
         }
 
-        // Ya se han comprobado todos los estaticos
-        this.dinamicos[i].x = this.dinamicos[i].x + movimientoPosible;
-        this.dinamicos[i].vx = movimientoPosible;
     }
 
-    }
-
-    agregarCuerpoDinamico(modelo){
+    agregarCuerpoDinamico(modelo) {
         this.dinamicos.push(modelo);
     }
 
-    agregarCuerpoEstatico(modelo){
+    agregarCuerpoEstatico(modelo) {
         this.estaticos.push(modelo);
     }
 
-    eliminarCuerpoDinamico (modelo) {
+    eliminarCuerpoDinamico(modelo) {
         for (var i = 0; i < this.dinamicos.length; i++) {
             if (this.dinamicos[i] == modelo) {
                 this.dinamicos.splice(i, 1);
@@ -222,12 +234,16 @@ class Espacio {
         }
     }
 
-    eliminarCuerpoEstatico(modelo){
+    eliminarCuerpoEstatico(modelo) {
         for (var i = 0; i < this.estaticos.length; i++) {
             if (this.estaticos[i] == modelo) {
                 this.estaticos.splice(i, 1);
             }
         }
+    }
+
+    choque(elemento) {
+        elemento.choca = true;
     }
 
 }

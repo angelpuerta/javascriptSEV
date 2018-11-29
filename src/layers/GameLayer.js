@@ -1,5 +1,3 @@
-
-
 class GameLayer extends Layer {
 
     constructor() {
@@ -38,7 +36,7 @@ class GameLayer extends Layer {
         this.disparosJugador = [];
         this.disparosEnemigo = [];
 
-        this.daño=1;
+        this.daño = 1;
         this.enemigos = [];
 
         this.bombas = [];
@@ -133,7 +131,7 @@ class GameLayer extends Layer {
             }
             for (var j = 0; j < this.enemigos.length; j++) {
                 if (this.explosiones[i].colisiona(this.enemigos[j])) {
-                    this.enemigos[i].estado=estados.muerto;
+                    this.enemigos[i].estado = estados.muerto;
                 }
             }
             for (var j = 0; j < this.piedras.length; j++) {
@@ -193,7 +191,7 @@ class GameLayer extends Layer {
 
         for (var j = 0; j < this.puertas.length; j++) {
             if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])) {
-                this.pausa = true;
+                // this.pausa = true;
                 nivelActual = this.puertas[i].getNextLevel();
                 this.iniciar();
             }
@@ -465,28 +463,28 @@ class GameLayer extends Layer {
         for (var i = 1; i <= lineas[0].length + 1; i++) {
             x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
-            this.agregarBloque(new Bloque(imagenes.paredB, x, y));
-            y = -32 / 2;
-            this.agregarBloque(new Bloque(imagenes.pared, x, y));
+            this.agregarBloque(new Pared(imagenes.paredB, x, y, orientaciones.abajo));
+            y = 0;
+            this.agregarBloque(new Pared(imagenes.pared, x, y, orientaciones.arriba));
 
         }
-        for (var i = 0; i < lineas.length ; i++) {
+        for (var i = 0; i < lineas.length; i++) {
             x = -30 / 2;
             y = 32 / 2 + i * 32;
-            this.agregarBloque(new Bloque(imagenes.paredI, x, y));
-            x = this.anchoMapa + 55;
-            this.agregarBloque(new Bloque(imagenes.paredD, x, y));
+            this.agregarBloque(new Pared(imagenes.paredI, x, y, orientaciones.izquierda));
+            x = this.anchoMapa ;
+            this.agregarBloque(new Pared(imagenes.paredD, x, y, orientaciones.derecha));
         }
-        x= -10;
+        x = -10;
         y = -10;
         this.agregarBloque(new Bloque(imagenes.paredAI, x, y));
-        x=this.anchoMapa+50;
+        x = this.anchoMapa + 50;
         y = -10;
         this.agregarBloque(new Bloque(imagenes.paredAD, x, y));
-        x= -10;
+        x = -10;
         y = this.altoMapa + 42;
         this.agregarBloque(new Bloque(imagenes.paredBI, x, y));
-        x=this.anchoMapa+50;
+        x = this.anchoMapa + 50;
         y = this.altoMapa + 42;
         this.agregarBloque(new Bloque(imagenes.paredBD, x, y));
     }
@@ -518,9 +516,9 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(this.jugador);
                 break;
             case "#":
-                var r=Math.random()*3;
-                if(r>2) var bloque = new Bloque(imagenes.piedra1, x, y);
-                else if(r>1) var bloque = new Bloque(imagenes.piedra2, x, y);
+                var r = Math.random() * 3;
+                if (r > 2) var bloque = new Bloque(imagenes.piedra1, x, y);
+                else if (r > 1) var bloque = new Bloque(imagenes.piedra2, x, y);
                 else var bloque = new Bloque(imagenes.piedra3, x, y);
                 bloque.y = bloque.y - bloque.alto / 2;
                 // modificación para empezar a contar desde el suelo
@@ -581,7 +579,7 @@ class GameLayer extends Layer {
                 if (!isNaN(parseInt(simbolo, 10))) {
 
                     var nextLevel = parseInt(simbolo, 10);
-                    this.ponePuerta(x,y,nextLevel);
+                    this.ponePuerta(x, y, nextLevel);
 
                 }
                 break;
@@ -589,13 +587,30 @@ class GameLayer extends Layer {
 
 
     }
-    ponePuerta(x,y,nextLevel) {
 
-        if(y==this.altoMapa+32)var puerta = new Puerta(imagenes.puerta_abajo_cerrada,imagenes.puerta_abajo_abierta,x, y+15, nextLevel);
-        if(y==32)var puerta = new Puerta(imagenes.puerta_arriba_cerrada,imagenes.puerta_arriba_abierta,x, y-48, nextLevel);
-        if(x==this.anchoMapa-20)var puerta = new Puerta(imagenes.puerta_derecha_cerrada,imagenes.puerta_derecha_abierta,x+75, y, nextLevel);
-        if(x==20)var puerta = new Puerta(imagenes.puerta_izquierda_cerrada,imagenes.puerta_izquierda_abierta,x-35, y, nextLevel);
-       // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
+    ponePuerta(x, y, nextLevel) {
+
+        var puerta;
+
+        puerta = new Puerta(imagenes.puerta_abajo_cerrada, imagenes.puerta_abajo_abierta, x, y, nextLevel);
+
+
+        if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.abajo)
+            .some(x => x.colisiona(puerta)))
+            puerta = new Puerta(imagenes.puerta_abajo_cerrada, imagenes.puerta_abajo_abierta, x, y + 15, nextLevel);
+        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.arriba)
+            .some(x => x.colisiona(puerta)))
+            puerta = new Puerta(imagenes.puerta_arriba_cerrada, imagenes.puerta_arriba_abierta, x, y - 48, nextLevel);
+        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.derecha)
+            .some(x => x.colisiona(puerta)))
+            puerta = new Puerta(imagenes.puerta_derecha_cerrada, imagenes.puerta_derecha_abierta, x + 75, y, nextLevel);
+        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.izquierda)
+            .some(x => x.colisiona(puerta)))
+            puerta = new Puerta(imagenes.puerta_izquierda_cerrada, imagenes.puerta_izquierda_abierta, x - 35, y, nextLevel);
+
+        this.espacio.estaticos.filter(x => x.colisiona(puerta)).forEach(z => this.espacio.eliminarCuerpoEstatico(z));
+
+        // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
         this.puertas.push(puerta);
         this.espacio.agregarCuerpoEstatico(puerta)
 
