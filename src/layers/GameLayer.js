@@ -295,7 +295,6 @@ class GameLayer extends Layer {
 
         for (var i = 0; i < this.puertas.length; i++) {
             if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])) {
-                // this.pausa = true;
                 this.guardarNivel();
                 nivelActual = this.puertas[i].getNextLevel();
                 this.iniciar();
@@ -423,12 +422,7 @@ class GameLayer extends Layer {
 
 
     procesarControles() {
-        if (controles.continuar) {
-            this.pausa = false;
-        }
-        if (controles.pausar) {
-            this.pausa = true;
-        }
+
         if (controles.bomba) {
             if (this.bombasJugador > 0) {
 
