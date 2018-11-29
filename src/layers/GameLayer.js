@@ -2,18 +2,15 @@ class GameLayer extends Layer {
 
     constructor() {
         super();
-        this.mensaje = new Boton(imagenes.mensaje_como_jugar, 480 / 2, 320 / 2);
-        this.pausa = true;
+        this.jugador = new Jugador(50, 50);//Pa que no se queje
         this.iniciar();
+
     }
 
     iniciar() {
         reproducirMusica();
 
 
-        this.botonSalto = new Boton(imagenes.boton_salto, 480 * 0.9, 320 * 0.55);
-        this.botonDisparo = new Boton(imagenes.boton_disparo, 480 * 0.75, 320 * 0.83);
-        this.pad = new Pad(480 * 0.14, 320 * 0.8);
         this.espacio = new Espacio();
 
         this.corazon_1 = new Fondo(imagenes.vida_llena, 480 * 0.1, 320 * 0.05);
@@ -23,7 +20,7 @@ class GameLayer extends Layer {
         this.dañoIcono = new Fondo(imagenes.daño, 480 * 0.05, 320 * 0.2);
         this.velocidadIcono = new Fondo(imagenes.velocidad, 480 * 0.05, 320 * 0.30);
         this.cadenciaIcono = new Fondo(imagenes.cadencia, 480 * 0.05, 320 * 0.40);
-        this.jugador = new Jugador(50, 50);//Pa que no se queje
+
         this.scrollX = 0;
         this.scrollY = 0;
         this.bombasJugador = 100;
@@ -58,7 +55,7 @@ class GameLayer extends Layer {
         this.puertas = [];
 
 
-        this.cargarMapa("res/" + 0 + ".txt");
+        this.cargarMapa("res/" + nivelActual + ".txt");
     }
 
     guardarNivel() {
@@ -75,9 +72,7 @@ class GameLayer extends Layer {
     cargarSiguienteNivel() {
         reproducirMusica();
 
-        this.botonSalto = new Boton(imagenes.boton_salto, 480 * 0.9, 320 * 0.55);
-        this.botonDisparo = new Boton(imagenes.boton_disparo, 480 * 0.75, 320 * 0.83);
-        this.pad = new Pad(480 * 0.14, 320 * 0.8);
+
         this.espacio = new Espacio();
 
         this.corazon_1 = new Fondo(imagenes.vida_llena, 480 * 0.1, 320 * 0.05);
@@ -134,9 +129,7 @@ class GameLayer extends Layer {
     }
 
     actualizar() {
-        if (this.pausa) {
-            return;
-        }
+
 
 
         this.espacio.actualizar();
@@ -303,7 +296,7 @@ class GameLayer extends Layer {
                 // this.pausa = true;
                 this.guardarNivel();
                 nivelActual = this.puertas[i].getNextLevel();
-                this.cargarSiguienteNivel();
+                this.iniciar();
             }
         }
 
@@ -413,9 +406,7 @@ class GameLayer extends Layer {
             this.corazones[i].dibujar(this.scrollX, this.scrollY);
         }
 
-        if (this.pausa) {
-            this.mensaje.dibujar(this.scrollX, this.scrollY);
-        }
+
         this.corazon_1.dibujar();
         this.corazon_2.dibujar();
         this.corazon_3.dibujar();
@@ -428,58 +419,7 @@ class GameLayer extends Layer {
 
     }
 
-    calcularPulsaciones(pulsaciones) {
-        // Suponemos botones no estan pulsados
-        this.botonDisparo.pulsado = false;
-        this.botonSalto.pulsado = false;
-        // suponemos que el pad esta en el centro
-        controles.moverX = 0;
-        // Suponemos a false
-        controles.continuar = false;
 
-        for (var i = 0; i < pulsaciones.length; i++) {
-            // Muy simple cualquier click en pantalla lo activa
-            if (pulsaciones[i].tipo == tipoPulsacion.inicio) {
-                controles.continuar = true;
-            }
-
-            if (this.pad.contienePunto(pulsaciones[i].x, pulsaciones[i].y)) {
-                var orientacionX = this.pad.obtenerOrientacionX(pulsaciones[i].x);
-                if (orientacionX > 20) { // de 0 a 20 no contabilizamosdw
-                    controles.moverX = orientacionX;
-                }
-                if (orientacionX < -20) { // de -20 a 0 no contabilizamos
-                    controles.moverX = orientacionX;
-                }
-            }
-
-            if (this.botonDisparo.contienePunto(pulsaciones[i].x, pulsaciones[i].y)) {
-                this.botonDisparo.pulsado = true;
-                if (pulsaciones[i].tipo == tipoPulsacion.inicio) {
-                    controles.disparo = true;
-                }
-            }
-
-            if (this.botonSalto.contienePunto(pulsaciones[i].x, pulsaciones[i].y)) {
-                this.botonSalto.pulsado = true;
-                if (pulsaciones[i].tipo == tipoPulsacion.inicio) {
-                    controles.moverY = 1;
-                }
-            }
-
-
-        }
-
-        // No pulsado - Boton Disparo
-        if (!this.botonDisparo.pulsado) {
-            controles.disparo = false;
-        }
-
-        // No pulsado - Boton Salto
-        if (!this.botonSalto.pulsado) {
-            controles.moverY = 0;
-        }
-    }
 
 
     procesarControles() {
