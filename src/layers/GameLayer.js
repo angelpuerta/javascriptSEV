@@ -3,6 +3,7 @@ class GameLayer extends Layer {
     constructor() {
         super();
         this.jugador = new Jugador(50, 50);//Pa que no se queje
+        this.pausa = true;
         this.iniciar();
 
     }
@@ -36,12 +37,16 @@ class GameLayer extends Layer {
         this.dañoTexto = new Texto(this.daño, 480 * 0.1, 320 * 0.22);
         this.velocidadTexto = new Texto(this.velocidad, 480 * 0.1, 320 * 0.32);
         this.cadenciaTexto = new Texto(this.cadencia, 480 * 0.1, 320 * 0.42);
-        //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
+
+        this.comoJugar = new Fondo(imagenes.mensaje_como_jugar, 480 * 0.5, 320 * 0.5);
 
         //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
 
 
         this.fondo = new Fondo(imagenes.fondo_2, 480 * 0.5, 320 * 0.5);
+
+        this.mensajeHasGanado = new Fondo(imagenes.mensaje_ganar, 480 * 0.5, 320 * 0.5);
+
 
         this.disparosJugador = [];
         this.disparosEnemigo = [];
@@ -55,7 +60,6 @@ class GameLayer extends Layer {
         this.explosiones = [];
 
         this.puertas = [];
-
 
         this.cargarMapa("res/" + nivelActual + ".txt");
     }
@@ -374,6 +378,7 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.bloques.length; i++) {
             this.bloques[i].dibujar(this.scrollX, this.scrollY);
         }
+
         for (var i = 0; i < this.piedras.length; i++) {
             this.piedras[i].dibujar(this.scrollX, this.scrollY);
         }
@@ -418,11 +423,24 @@ class GameLayer extends Layer {
         this.cadenciaTexto.dibujar();
         this.velocidadTexto.dibujar();
 
+
+        if (this.pausa)
+            this.comoJugar.dibujar();
+
+        if (this.hasganado()) {
+            this.mensajeHasGanado.dibujar();
+        }
+
     }
 
 
     procesarControles() {
-
+        if (controles.continuar) {
+            this.pausa = false;
+        }
+        if (controles.pausar) {
+            this.pausa = true;
+        }
         if (controles.bomba) {
             if (this.bombasJugador > 0) {
 
@@ -694,6 +712,10 @@ class GameLayer extends Layer {
         this.espacio.agregarCuerpoEstatico(puerta);
 
 
+    }
+
+    hasganado() {
+        return nivelActual === ultimoNivel && this.enemigos.length === 0;
     }
 
 

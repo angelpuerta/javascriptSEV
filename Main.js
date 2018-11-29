@@ -26,7 +26,8 @@ function iniciarJuego() {
 }
 
 function loop() {
-    layer.actualizar();
+    if (!layer.pausa)
+        layer.actualizar();
     if (entrada == entradas.pulsaciones) {
         layer.calcularPulsaciones(pulsaciones);
     }
