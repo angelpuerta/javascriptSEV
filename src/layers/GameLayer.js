@@ -1,5 +1,3 @@
-
-
 class GameLayer extends Layer {
 
     constructor() {
@@ -22,9 +20,9 @@ class GameLayer extends Layer {
         this.corazon_2 = new Fondo(imagenes.vida_llena, 480 * 0.125, 320 * 0.05);
         this.corazon_3 = new Fondo(imagenes.vida_llena, 480 * 0.15, 320 * 0.05);
 
-        this.dañoIcono=new Fondo(imagenes.daño,480*0.05,320*0.2);
-        this.velocidadIcono=new Fondo(imagenes.velocidad,480*0.05,320*0.30);
-        this.cadenciaIcono=new Fondo(imagenes.cadencia,480*0.05,320*0.40);
+        this.dañoIcono = new Fondo(imagenes.daño, 480 * 0.05, 320 * 0.2);
+        this.velocidadIcono = new Fondo(imagenes.velocidad, 480 * 0.05, 320 * 0.30);
+        this.cadenciaIcono = new Fondo(imagenes.cadencia, 480 * 0.05, 320 * 0.40);
         this.jugador = new Jugador(50, 50);//Pa que no se queje
         this.scrollX = 0;
         this.scrollY = 0;
@@ -32,13 +30,13 @@ class GameLayer extends Layer {
         this.bloques = [];
         this.piedras = [];
         this.corazones = [];
-        this.powerups=[];
-        this.daño=1;
-        this.velocidad=this.jugador.v;
-        this.cadencia=this.jugador.cadenciaDisparo;
-        this.dañoTexto=new Texto(this.daño,480*0.1,320*0.22);
-        this.velocidadTexto=new Texto(this.velocidad,480*0.1,320*0.32);
-        this.cadenciaTexto=new Texto(this.cadencia,480*0.1,320*0.42);
+        this.powerups = [];
+        this.daño = 1;
+        this.velocidad = this.jugador.v;
+        this.cadencia = this.jugador.cadenciaDisparo;
+        this.dañoTexto = new Texto(this.daño, 480 * 0.1, 320 * 0.22);
+        this.velocidadTexto = new Texto(this.velocidad, 480 * 0.1, 320 * 0.32);
+        this.cadenciaTexto = new Texto(this.cadencia, 480 * 0.1, 320 * 0.42);
         //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
         //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
@@ -49,6 +47,7 @@ class GameLayer extends Layer {
         this.disparosJugador = [];
         this.disparosEnemigo = [];
 
+        this.daño = 1;
 
         this.enemigos = [];
 
@@ -59,15 +58,13 @@ class GameLayer extends Layer {
         this.puertas = [];
 
 
-
-        this.cargarMapa("res/" + 0 + ".txt");
+        this.cargarMapa("res/" + nivelActual + ".txt");
     }
 
     actualizar() {
         if (this.pausa) {
             return;
         }
-
 
 
         this.espacio.actualizar();
@@ -77,9 +74,9 @@ class GameLayer extends Layer {
         this.enemigos.forEach(x => x.actualizar());
         this.disparosJugador.forEach(x => x.actualizar());
         this.disparosEnemigo.forEach(x => x.actualizar());
-        this.cadenciaTexto.valor=this.jugador.cadenciaDisparo;
-        this.velocidadTexto.valor=this.jugador.v;
-        this.dañoTexto.valor=this.jugador.daño;
+        this.cadenciaTexto.valor = this.jugador.cadenciaDisparo;
+        this.velocidadTexto.valor = this.jugador.v;
+        this.dañoTexto.valor = this.jugador.daño;
 
         for (var i = 0; i < this.disparosEnemigo.length; i++) {
             if (this.disparosEnemigo[i] != null && this.disparosEnemigo[i].colisiona(this.jugador)) {
@@ -122,7 +119,6 @@ class GameLayer extends Layer {
         }
 
 
-
         // colisiones
         for (var i = 0; i < this.enemigos.length; i++) {
             if (this.jugador.colisiona(this.enemigos[i])) {
@@ -144,20 +140,20 @@ class GameLayer extends Layer {
             if (this.jugador.colisiona(this.powerups[i])) {
 
 
-                if(this.powerups[i].tipo==0){
+                if (this.powerups[i].tipo == 0) {
 
-                    this.jugador.v=this.jugador.v*1.5;
-                if(this.jugador.v>6)
-                    this.jugador.v=6;
+                    this.jugador.v = this.jugador.v * 1.5;
+                    if (this.jugador.v > 6)
+                        this.jugador.v = 6;
 
                 }
-                else if(this.powerups[i].tipo==1){
-                    this.jugador.daño=this.jugador.daño*2;
+                else if (this.powerups[i].tipo == 1) {
+                    this.jugador.daño = this.jugador.daño * 2;
                 }
-                else if(this.powerups[i].tipo==2){
-                    this.jugador.cadenciaDisparo=this.jugador.cadenciaDisparo-7;
+                else if (this.powerups[i].tipo == 2) {
+                    this.jugador.cadenciaDisparo = this.jugador.cadenciaDisparo - 7;
                 }
-                this.powerups.splice(i,1);
+                this.powerups.splice(i, 1);
             }
         }
 
@@ -169,7 +165,7 @@ class GameLayer extends Layer {
             }
             for (var j = 0; j < this.enemigos.length; j++) {
                 if (this.explosiones[i].colisiona(this.enemigos[j])) {
-                    this.enemigos[i].estado=estados.muerto;
+                    this.enemigos[i].estado = estados.muerto;
                 }
             }
             for (var j = 0; j < this.piedras.length; j++) {
@@ -227,14 +223,15 @@ class GameLayer extends Layer {
             this.puertas.forEach(x => x.open())
         }
 
-        for (var j = 0; j < this.puertas.length; j++) {
+        this.calculaVida();
+
+        for (var i = 0; i < this.puertas.length; i++) {
             if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])) {
-                this.pausa = true;
+                // this.pausa = true;
                 nivelActual = this.puertas[i].getNextLevel();
                 this.iniciar();
             }
         }
-        this.calculaVida();
 
     }
 
@@ -507,35 +504,35 @@ class GameLayer extends Layer {
         var bloque, x, y;
 
 
-        for (var i = 1; i <= lineas[0].length+2 ; i++) {
+        for (var i = 1; i <= lineas[0].length + 2; i++) {
             x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
             this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
-            this.agregarPared(new Bloque(imagenes.paredB, x, y-2));
-            y = -38/ 2;
+            this.agregarPared(new Bloque(imagenes.paredB, x, y - 2));
+            y = -38 / 2;
             this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
-            this.agregarPared(new Bloque(imagenes.pared, x, y+4));
+            this.agregarPared(new Bloque(imagenes.pared, x, y + 4));
 
         }
-        for (var i = 0; i < lineas.length ; i++) {
+        for (var i = 0; i < lineas.length; i++) {
             x = -35 / 2;
             y = 32 / 2 + i * 32;
             this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
-            this.agregarPared(new Bloque(imagenes.paredI, x+2, y));
+            this.agregarPared(new Bloque(imagenes.paredI, x + 2, y));
             x = this.anchoMapa + 55;
             this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
-            this.agregarPared(new Bloque(imagenes.paredD, x-2, y));
+            this.agregarPared(new Bloque(imagenes.paredD, x - 2, y));
         }
-        x= -10;
+        x = -10;
         y = -10;
         this.agregarPared(new Bloque(imagenes.paredAI, x, y));
-        x=this.anchoMapa+50;
+        x = this.anchoMapa + 50;
         y = -10;
         this.agregarPared(new Bloque(imagenes.paredAD, x, y));
-        x= -10;
+        x = -10;
         y = this.altoMapa + 42;
         this.agregarPared(new Bloque(imagenes.paredBI, x, y));
-        x=this.anchoMapa+52;
+        x = this.anchoMapa + 52;
         y = this.altoMapa + 42;
         this.agregarPared(new Bloque(imagenes.paredBD, x, y));
     }
@@ -544,7 +541,8 @@ class GameLayer extends Layer {
         this.espacio.agregarCuerpoEstatico(bloque);
         this.bloques.push(bloque);
     }
-    agregarPared(pared){
+
+    agregarPared(pared) {
         this.espacio.agregarCuerpoDinamico(pared);
         this.bloques.push(pared);
     }
@@ -571,9 +569,9 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(this.jugador);
                 break;
             case "#":
-                var r=Math.random()*3;
-                if(r>2) var bloque = new Bloque(imagenes.piedra1, x, y);
-                else if(r>1) var bloque = new Bloque(imagenes.piedra2, x, y);
+                var r = Math.random() * 3;
+                if (r > 2) var bloque = new Bloque(imagenes.piedra1, x, y);
+                else if (r > 1) var bloque = new Bloque(imagenes.piedra2, x, y);
                 else var bloque = new Bloque(imagenes.piedra3, x, y);
                 bloque.y = bloque.y - bloque.alto / 2;
                 // modificación para empezar a contar desde el suelo
@@ -631,21 +629,21 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(corazon);
                 break;
             case "ñ":
-                var pudaño = new PowerUp(imagenes.pudaño, x, y,1);
+                var pudaño = new PowerUp(imagenes.pudaño, x, y, 1);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
                 this.espacio.agregarCuerpoDinamico(pudaño);
                 break;
             case "v":
-                var pudaño = new PowerUp(imagenes.puvelocidad, x, y,0);
+                var pudaño = new PowerUp(imagenes.puvelocidad, x, y, 0);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
                 this.espacio.agregarCuerpoDinamico(pudaño);
                 break;
             case "n":
-                var pudaño = new PowerUp(imagenes.pucadencia, x, y,2);
+                var pudaño = new PowerUp(imagenes.pucadencia, x, y, 2);
                 pudaño.y = pudaño.y - pudaño.alto / 2;
                 // modificación para empezar a contar desde el suelo
                 this.powerups.push(pudaño);
@@ -656,7 +654,7 @@ class GameLayer extends Layer {
                 if (!isNaN(parseInt(simbolo, 10))) {
 
                     var nextLevel = parseInt(simbolo, 10);
-                    this.ponePuerta(x,y,nextLevel);
+                    this.ponePuerta(x, y, nextLevel);
 
                 }
                 break;
@@ -664,15 +662,20 @@ class GameLayer extends Layer {
 
 
     }
-    ponePuerta(x,y,nextLevel) {
+
+    ponePuerta(x, y, nextLevel) {
         var puerta;
-        if(y==this.altoMapa+32)puerta = new Puerta(imagenes.puerta_abajo_cerrada,imagenes.puerta_abajo_abierta,x, y+15, nextLevel);
-        if(y==32) puerta = new Puerta(imagenes.puerta_arriba_cerrada,imagenes.puerta_arriba_abierta,x, y-48, nextLevel);
-        if(x==this.anchoMapa-20) puerta = new Puerta(imagenes.puerta_derecha_cerrada,imagenes.puerta_derecha_abierta,x+75, y, nextLevel);
-        if(x==20) puerta = new Puerta(imagenes.puerta_izquierda_cerrada,imagenes.puerta_izquierda_abierta,x-35, y, nextLevel);
-       // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
+        if (y == this.altoMapa + 32) puerta = new Puerta(imagenes.puerta_abajo_cerrada, imagenes.puerta_abajo_abierta, x, y + 15, nextLevel);
+        else if (y == 32) puerta = new Puerta(imagenes.puerta_arriba_cerrada, imagenes.puerta_arriba_abierta, x, y - 48, nextLevel);
+        else if (x == this.anchoMapa - 20) puerta = new Puerta(imagenes.puerta_derecha_cerrada, imagenes.puerta_derecha_abierta, x + 75, y, nextLevel);
+        else if (x == 20) puerta = new Puerta(imagenes.puerta_izquierda_cerrada, imagenes.puerta_izquierda_abierta, x - 35, y, nextLevel);
+
+        else var puerta = new Puerta(imagenes.puerta_izquierda_cerrada, x, y, nextLevel);
+
+        this.espacio.estaticos.filter(x => x.colisiona(puerta)).forEach(x => this.espacio.eliminarCuerpoEstatico(x));
+
         this.puertas.push(puerta);
-        this.espacio.agregarCuerpoDinamico(puerta)
+        this.espacio.agregarCuerpoEstatico(puerta);
 
 
     }
