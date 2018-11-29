@@ -215,7 +215,8 @@ class GameLayer extends Layer {
                     this.jugador.daño = this.jugador.daño * 2;
                 }
                 else if (this.powerups[i].tipo == 2) {
-                    this.jugador.cadenciaDisparo = this.jugador.cadenciaDisparo - 7;
+                    if (this.jugador.cadenciaDisparo - 7 > 0)
+                        this.jugador.cadenciaDisparo = this.jugador.cadenciaDisparo - 7;
                 }
                 this.powerups.splice(i, 1);
             }
