@@ -87,7 +87,6 @@ class GameLayer extends Layer {
         this.dañoIcono = new Fondo(imagenes.daño, 480 * 0.05, 320 * 0.2);
         this.velocidadIcono = new Fondo(imagenes.velocidad, 480 * 0.05, 320 * 0.30);
         this.cadenciaIcono = new Fondo(imagenes.cadencia, 480 * 0.05, 320 * 0.40);
-        this.jugador = new Jugador(50, 50);//Pa que no se queje
         this.scrollX = 0;
         this.scrollY = 0;
         this.bombasJugador = 100;
@@ -196,9 +195,7 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.enemigos.length; i++) {
             if (this.jugador.colisiona(this.enemigos[i])) {
                 this.jugador.golpeado();
-                if (this.jugador.vidas <= 0) {
-                    this.iniciar();
-                }
+
             }
         }
 
@@ -308,6 +305,10 @@ class GameLayer extends Layer {
                 nivelActual = this.puertas[i].getNextLevel();
                 this.cargarSiguienteNivel();
             }
+        }
+
+        if (this.jugador.vidas <= 0) {
+            this.iniciar();
         }
 
     }
@@ -642,7 +643,8 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(enemigo);
                 break;
             case "J":
-                this.jugador = new Jugador(x, y);
+                this.jugador.x = x;
+                this.jugador.y = y;
                 // modificación para empezar a contar desde el suelo
                 this.jugador.y = this.jugador.y - this.jugador.alto / 2;
                 this.espacio.agregarCuerpoDinamico(this.jugador);

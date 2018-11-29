@@ -12,11 +12,15 @@ var menuLayer;
 var controles = {};
 controles.arma = 0;
 
+var rutasImagenes = Object.values(imagenes);
+cargarImagenes(0);
+
 // Inicio capas y bucle del juego
 function iniciarJuego() {
     //gameLayer = new GameLayer();
     menuLayer = new MenuLayer();
     layer = menuLayer;
+
     setInterval(loop, 1000 / 30);
 
 }

@@ -38,7 +38,6 @@ var imagenes = {
     copa: "res/copa.png",
 
 
-
     menu_fondo: "res/menu_fondo.png",
     boton_jugar: "res/boton_jugar.png",
     mensaje_como_jugar: "res/mensaje_como_jugar.png",
@@ -74,17 +73,17 @@ var imagenes = {
     bomba: "res/bomba.png",
     bomba_explota: "res/bombaexplota.png",
     explosion: "res/explosion.png",
-    icono_explosion:"res/icono_explosion.png",
-    vida_llena:"res/vida_llena.png",
-    vida_media:"res/vida_media.png",
-    vida_vacia:"res/vida_vacia.png",
+    icono_explosion: "res/icono_explosion.png",
+    vida_llena: "res/vida_llena.png",
+    vida_media: "res/vida_media.png",
+    vida_vacia: "res/vida_vacia.png",
 
-    pudaño:"res/pudaño.png",
-    pucadencia:"res/pucadencia.png",
-    puvelocidad:"res/puvelocidad.png",
-    cadencia:"res/cadencia.png",
-    daño:"res/daño.png",
-    velocidad:"res/velocidad.png",
+    pudaño: "res/pudaño.png",
+    pucadencia: "res/pucadencia.png",
+    puvelocidad: "res/puvelocidad.png",
+    cadencia: "res/cadencia.png",
+    daño: "res/daño.png",
+    velocidad: "res/velocidad.png",
     disparo_paralizante: "res/disparo_paralizante.png",
     ataque_cuerpo_animacion: "res/slash_animacion.png",
     ataque_cuerpo: "res/slash.png",
@@ -93,8 +92,6 @@ var imagenes = {
     corazon: "res/corazon.png"
 };
 
-var rutasImagenes = Object.values(imagenes);
-cargarImagenes(0);
 
 function cargarImagenes(indice) {
     var imagenCargar = new Image();
