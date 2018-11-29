@@ -65,3 +65,5 @@ arma.paralizante = 2;
 arma.cuerpo = 3;
 
 var niveles_explorados = {};
+
+var ultimoNivel = 3;
