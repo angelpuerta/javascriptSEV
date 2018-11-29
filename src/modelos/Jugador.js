@@ -76,6 +76,7 @@ class Jugador extends Modelo {
 
     golpeado() {
         if (this.tiempoInvulnerable <= 0) {
+            reproducirEfecto(efectos.golpeo);
             if (this.vidas > 0) {
                 this.vidas--;
                 this.tiempoInvulnerable = 100;

@@ -151,8 +151,8 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.disparosEnemigo.length; i++) {
             if (this.disparosEnemigo[i] != null && this.disparosEnemigo[i].colisiona(this.jugador)) {
                 this.jugador.golpeado();
-                reproducirEfecto(efectos.golpeo);
-        
+
+
                 this.disparosEnemigo.splice(i, 1);
             }
         }
@@ -232,7 +232,7 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.explosiones.length; i++) {
             if (this.jugador.colisiona(this.explosiones[i])) {
                 this.jugador.golpeado();
-                reproducirEfecto(efectos.golpeo);
+
 
             }
             for (var j = 0; j < this.enemigos.length; j++) {
@@ -310,7 +310,7 @@ class GameLayer extends Layer {
 
         if (this.jugador.vidas <= 0) {
             this.iniciar();
-            reproducirEfecto(efectos.muere;
+            reproducirEfecto(efectos.muere);
         }
 
     }
