@@ -7,10 +7,11 @@ class Jugador extends Modelo {
 
         this.estado = estados.moviendo;
         this.orientacion = orientaciones.abajo;
+        this.v=3;
         this.vx = 0; // velocidadX
         this.vy = 0; // velocidadY
         this.arma = arma.distancia;
-
+        this.daño=1;
         // Animaciones
         this.aDispararDerecha = new Animacion(imagenes.jugador_idle_derecha,
             this.ancho, this.alto, 6, 1, this.finAnimacionDisparar.bind(this));
@@ -56,7 +57,7 @@ class Jugador extends Modelo {
 
             reproducirEfecto(efectos.disparo);
 
-            var disparo = this.generarDisparo(this.x, this.y, this.orientacion);
+            var disparo = this.generarDisparo(this.x, this.y, this.orientacion,this.daño);
             return disparo;
         } else {
             return null;
@@ -179,11 +180,11 @@ class Jugador extends Modelo {
     }
 
     moverX(direccion) {
-        this.vx = direccion * 3;
+        this.vx = direccion * this.v;
     }
 
     moverY(direccion) {
-        this.vy = direccion * 3;
+        this.vy = direccion * this.v;
     }
 
     cambiarOrientacion(orientacion) {
@@ -194,16 +195,16 @@ class Jugador extends Modelo {
         this.arma = arma;
     }
 
-    generarDisparo(x, y, orientacion) {
+    generarDisparo(x, y, orientacion,daño) {
         switch (this.arma) {
             case arma.distancia:
-                return new DisparoJugador(x, y, orientacion);
+                return new DisparoJugador(x, y, orientacion,daño);
                 break;
             case arma.paralizante:
-                return new DisparoParalizante(x, y, orientacion);
+                return new DisparoParalizante(x, y, orientacion,daño);
                 break;
             case arma.cuerpo:
-                return new AtaqueCuerpo(x, y, orientacion);
+                return new AtaqueCuerpo(x, y, orientacion,daño);
                 break;
         }
     }

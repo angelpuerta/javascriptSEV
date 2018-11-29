@@ -1,11 +1,13 @@
 class DisparoBase extends Modelo {
 
-    constructor(imagen, x, y, orientacion) {
+    constructor(imagen, x, y, orientacion,daño) {
         super(imagen, x, y);
         this.vx = 0;
         this.vy = 0;
         this.velocidad = 9;
-        this.daño = 1;
+        if(daño!=null){
+        this.daño = 1*daño;}
+        else this.daño=1;
         this.stuneo = 0;
         this.orientar(orientacion);
     }

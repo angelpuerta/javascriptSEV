@@ -20,12 +20,23 @@ class GameLayer extends Layer {
         this.corazon_2 = new Fondo(imagenes.vida_llena, 480 * 0.125, 320 * 0.05);
         this.corazon_3 = new Fondo(imagenes.vida_llena, 480 * 0.15, 320 * 0.05);
 
+        this.dañoIcono=new Fondo(imagenes.daño,480*0.05,320*0.2);
+        this.velocidadIcono=new Fondo(imagenes.velocidad,480*0.05,320*0.30);
+        this.cadenciaIcono=new Fondo(imagenes.cadencia,480*0.05,320*0.40);
+        this.jugador = new Jugador(50, 50);//Pa que no se queje
         this.scrollX = 0;
         this.scrollY = 0;
         this.bombasJugador = 100;
         this.bloques = [];
         this.piedras = [];
         this.corazones = [];
+        this.powerups=[];
+        this.daño=1;
+        this.velocidad=this.jugador.v;
+        this.cadencia=this.jugador.cadenciaDisparo;
+        this.dañoTexto=new Texto(this.daño,480*0.1,320*0.22);
+        this.velocidadTexto=new Texto(this.velocidad,480*0.1,320*0.32);
+        this.cadenciaTexto=new Texto(this.cadencia,480*0.1,320*0.42);
         //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
 
         //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
@@ -37,6 +48,7 @@ class GameLayer extends Layer {
         this.disparosEnemigo = [];
 
         this.daño = 1;
+
         this.enemigos = [];
 
         this.bombas = [];
@@ -45,15 +57,16 @@ class GameLayer extends Layer {
 
         this.puertas = [];
 
-        this.jugador = new Jugador(50, 50);//Pa que no se queje
 
-        this.cargarMapa("res/" + nivelActual + ".txt");
+
+        this.cargarMapa("res/" + 0 + ".txt");
     }
 
     actualizar() {
         if (this.pausa) {
             return;
         }
+
 
 
         this.espacio.actualizar();
@@ -63,6 +76,9 @@ class GameLayer extends Layer {
         this.enemigos.forEach(x => x.actualizar());
         this.disparosJugador.forEach(x => x.actualizar());
         this.disparosEnemigo.forEach(x => x.actualizar());
+        this.cadenciaTexto.valor=this.jugador.cadenciaDisparo;
+        this.velocidadTexto.valor=this.jugador.v;
+        this.dañoTexto.valor=this.jugador.daño;
 
         for (var i = 0; i < this.disparosEnemigo.length; i++) {
             if (this.disparosEnemigo[i] != null && this.disparosEnemigo[i].colisiona(this.jugador)) {
@@ -71,7 +87,7 @@ class GameLayer extends Layer {
             }
         }
 
-        // Eliminar disparos sin velocidad
+        // Eliminar disparos sin velocidadIcono
 
         for (var i = 0; i < this.enemigos.length; i++) {
             this.enemigos[i].actualizar();
@@ -105,6 +121,7 @@ class GameLayer extends Layer {
         }
 
 
+
         // colisiones
         for (var i = 0; i < this.enemigos.length; i++) {
             if (this.jugador.colisiona(this.enemigos[i])) {
@@ -120,6 +137,26 @@ class GameLayer extends Layer {
             if (this.jugador.colisiona(this.bombas[i]) && this.bombas[i].estado == estados.moviendo) {
                 this.bombasJugador++;
                 this.bombas.splice(i, 1);
+            }
+        }
+        for (var i = 0; i < this.powerups.length; i++) {
+            if (this.jugador.colisiona(this.powerups[i])) {
+
+
+                if(this.powerups[i].tipo==0){
+
+                    this.jugador.v=this.jugador.v*1.5;
+                if(this.jugador.v>6)
+                    this.jugador.v=6;
+
+                }
+                else if(this.powerups[i].tipo==1){
+                    this.jugador.daño=this.jugador.daño*2;
+                }
+                else if(this.powerups[i].tipo==2){
+                    this.jugador.cadenciaDisparo=this.jugador.cadenciaDisparo-7;
+                }
+                this.powerups.splice(i,1);
             }
         }
 
@@ -263,9 +300,6 @@ class GameLayer extends Layer {
         this.calcularScroll();
         this.fondo.dibujar();
 
-        this.corazon_1.dibujar();
-        this.corazon_2.dibujar();
-        this.corazon_3.dibujar();
 
         for (var i = 0; i < this.bloques.length; i++) {
             this.bloques[i].dibujar(this.scrollX, this.scrollY);
@@ -293,9 +327,10 @@ class GameLayer extends Layer {
             this.explosiones[i].actualizar();
         }
 
-        this.corazon_1.dibujar();
-        this.corazon_2.dibujar();
-        this.corazon_3.dibujar();
+        for (var i = 0; i < this.powerups.length; i++) {
+            this.powerups[i].dibujar(this.scrollX, this.scrollY);
+        }
+
         this.puertas.forEach(x => x.dibujar(this.scrollX, this.scrollY));
 
         for (var i = 0; i < this.corazones.length; i++) {
@@ -305,6 +340,16 @@ class GameLayer extends Layer {
         if (this.pausa) {
             this.mensaje.dibujar(this.scrollX, this.scrollY);
         }
+        this.corazon_1.dibujar();
+        this.corazon_2.dibujar();
+        this.corazon_3.dibujar();
+        this.dañoIcono.dibujar();
+        this.cadenciaIcono.dibujar();
+        this.velocidadIcono.dibujar();
+        this.dañoTexto.dibujar();
+        this.cadenciaTexto.dibujar();
+        this.velocidadTexto.dibujar();
+
     }
 
     calcularPulsaciones(pulsaciones) {
@@ -449,6 +494,7 @@ class GameLayer extends Layer {
                     this.cargarObjetoMapa(simbolo, x, y);
                 }
             }
+
             this.wavefront = new Wavefront(this.altoMapa, this.anchoMapa);
         }.bind(this);
 
@@ -460,38 +506,46 @@ class GameLayer extends Layer {
         var bloque, x, y;
 
 
-        for (var i = 1; i <= lineas[0].length + 1; i++) {
+        for (var i = 1; i <= lineas[0].length+2 ; i++) {
             x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
-            this.agregarBloque(new Pared(imagenes.paredB, x, y, orientaciones.abajo));
-            y = 0;
-            this.agregarBloque(new Pared(imagenes.pared, x, y, orientaciones.arriba));
+            this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
+            this.agregarPared(new Bloque(imagenes.paredB, x, y-2));
+            y = -38/ 2;
+            this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
+            this.agregarPared(new Bloque(imagenes.pared, x, y+4));
 
         }
-        for (var i = 0; i < lineas.length; i++) {
-            x = -30 / 2;
+        for (var i = 0; i < lineas.length ; i++) {
+            x = -35 / 2;
             y = 32 / 2 + i * 32;
-            this.agregarBloque(new Pared(imagenes.paredI, x, y, orientaciones.izquierda));
-            x = this.anchoMapa ;
-            this.agregarBloque(new Pared(imagenes.paredD, x, y, orientaciones.derecha));
+            this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
+            this.agregarPared(new Bloque(imagenes.paredI, x+2, y));
+            x = this.anchoMapa + 55;
+            this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
+            this.agregarPared(new Bloque(imagenes.paredD, x-2, y));
         }
         x = -10;
         y = -10;
-        this.agregarBloque(new Bloque(imagenes.paredAI, x, y));
-        x = this.anchoMapa + 50;
+        this.agregarPared(new Bloque(imagenes.paredAI, x, y));
+        x=this.anchoMapa+50;
         y = -10;
-        this.agregarBloque(new Bloque(imagenes.paredAD, x, y));
-        x = -10;
+        this.agregarPared(new Bloque(imagenes.paredAD, x, y));
+        x= -10;
         y = this.altoMapa + 42;
-        this.agregarBloque(new Bloque(imagenes.paredBI, x, y));
-        x = this.anchoMapa + 50;
+        this.agregarPared(new Bloque(imagenes.paredBI, x, y));
+        x=this.anchoMapa+52;
         y = this.altoMapa + 42;
-        this.agregarBloque(new Bloque(imagenes.paredBD, x, y));
+        this.agregarPared(new Bloque(imagenes.paredBD, x, y));
     }
 
-    agregarBloque(bloque) {
+    agregarParedInvisible(bloque) {
         this.espacio.agregarCuerpoEstatico(bloque);
         this.bloques.push(bloque);
+    }
+    agregarPared(pared){
+        this.espacio.agregarCuerpoDinamico(pared);
+        this.bloques.push(pared);
     }
 
 
@@ -575,6 +629,28 @@ class GameLayer extends Layer {
                 this.corazones.push(corazon);
                 this.espacio.agregarCuerpoDinamico(corazon);
                 break;
+            case "ñ":
+                var pudaño = new PowerUp(imagenes.pudaño, x, y,1);
+                pudaño.y = pudaño.y - pudaño.alto / 2;
+                // modificación para empezar a contar desde el suelo
+                this.powerups.push(pudaño);
+                this.espacio.agregarCuerpoDinamico(pudaño);
+                break;
+            case "v":
+                var pudaño = new PowerUp(imagenes.puvelocidad, x, y,0);
+                pudaño.y = pudaño.y - pudaño.alto / 2;
+                // modificación para empezar a contar desde el suelo
+                this.powerups.push(pudaño);
+                this.espacio.agregarCuerpoDinamico(pudaño);
+                break;
+            case "n":
+                var pudaño = new PowerUp(imagenes.pucadencia, x, y,2);
+                pudaño.y = pudaño.y - pudaño.alto / 2;
+                // modificación para empezar a contar desde el suelo
+                this.powerups.push(pudaño);
+                this.espacio.agregarCuerpoDinamico(pudaño);
+                break;
+
             default:
                 if (!isNaN(parseInt(simbolo, 10))) {
 
@@ -587,32 +663,15 @@ class GameLayer extends Layer {
 
 
     }
-
-    ponePuerta(x, y, nextLevel) {
-
+    ponePuerta(x,y,nextLevel) {
         var puerta;
-
-        puerta = new Puerta(imagenes.puerta_abajo_cerrada, imagenes.puerta_abajo_abierta, x, y, nextLevel);
-
-
-        if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.abajo)
-            .some(x => x.colisiona(puerta)))
-            puerta = new Puerta(imagenes.puerta_abajo_cerrada, imagenes.puerta_abajo_abierta, x, y + 15, nextLevel);
-        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.arriba)
-            .some(x => x.colisiona(puerta)))
-            puerta = new Puerta(imagenes.puerta_arriba_cerrada, imagenes.puerta_arriba_abierta, x, y - 48, nextLevel);
-        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.derecha)
-            .some(x => x.colisiona(puerta)))
-            puerta = new Puerta(imagenes.puerta_derecha_cerrada, imagenes.puerta_derecha_abierta, x + 75, y, nextLevel);
-        else if (this.espacio.estaticos.filter(x => x.orientacion !== undefined && x.orientacion === orientaciones.izquierda)
-            .some(x => x.colisiona(puerta)))
-            puerta = new Puerta(imagenes.puerta_izquierda_cerrada, imagenes.puerta_izquierda_abierta, x - 35, y, nextLevel);
-
-        this.espacio.estaticos.filter(x => x.colisiona(puerta)).forEach(z => this.espacio.eliminarCuerpoEstatico(z));
-
-        // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
+        if(y==this.altoMapa+32)puerta = new Puerta(imagenes.puerta_abajo_cerrada,imagenes.puerta_abajo_abierta,x, y+15, nextLevel);
+        if(y==32) puerta = new Puerta(imagenes.puerta_arriba_cerrada,imagenes.puerta_arriba_abierta,x, y-48, nextLevel);
+        if(x==this.anchoMapa-20) puerta = new Puerta(imagenes.puerta_derecha_cerrada,imagenes.puerta_derecha_abierta,x+75, y, nextLevel);
+        if(x==20) puerta = new Puerta(imagenes.puerta_izquierda_cerrada,imagenes.puerta_izquierda_abierta,x-35, y, nextLevel);
+       // else var puerta= new Puerta(imagenes.puerta_izquierda_cerrada,x-35, y, nextLevel);
         this.puertas.push(puerta);
-        this.espacio.agregarCuerpoEstatico(puerta)
+        this.espacio.agregarCuerpoDinamico(puerta)
 
 
     }
