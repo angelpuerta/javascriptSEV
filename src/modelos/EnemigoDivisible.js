@@ -74,12 +74,18 @@ class EnemigoDivisible extends BaseEnemigo {
     ponerEnPantalla(hijo) {
         if (!(gameLayer === undefined || gameLayer.anchoMapa === undefined || gameLayer.altoMapa === undefined)) {
             var jugador = this;
+            var contador = 150;
             hijo.x = 480 * 0.3 * (Math.random() - 0.5) + jugador.x;
             hijo.y = 320 * 0.3 * (Math.random() - 0.5) + jugador.y;
-            while (this.x < 32 || this.y < 40 ||
-            this.x > gameLayer.anchoMapa || this.y > gameLayer.altoMapa ||
-            gameLayer.espacio.estaticos.some(x => x.colisiona(this)) ||
-            gameLayer.espacio.dinamicos.some(x => x !== this && x.colisiona(this))) {
+            while (contador > 0 && (this.x < 32 || this.y < 40 ||
+                this.x > gameLayer.anchoMapa || this.y > gameLayer.altoMapa ||
+                gameLayer.espacio.estaticos.some(x => x.colisiona(this)) ||
+                gameLayer.espacio.dinamicos.some(x => x !== this && x.colisiona(this)))) {
+                hijo.x = 480 * 0.5 * (Math.random() - 0.5) + jugador.x;
+                hijo.y = 320 * 0.5 * (Math.random() - 0.5) + jugador.y;
+                contador--;
+            }
+            if(contador <= 0){
                 hijo.x = 480 * 0.3 * (Math.random() - 0.5) + jugador.x;
                 hijo.y = 320 * 0.3 * (Math.random() - 0.5) + jugador.y;
             }

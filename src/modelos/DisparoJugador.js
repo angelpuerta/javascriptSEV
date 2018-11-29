@@ -1,10 +1,15 @@
 class DisparoJugador extends DisparoBase {
 
     constructor(x, y, orientacion, daño) {
-        super(imagenes.disparo_jugador, x, y, daño)
+        super(imagenes.disparo_jugador, x, y, daño);
         this.vx = 0;
         this.vy = 0;
         this.velocidad = 9;
+        var daño = daño || 0;
+        if (daño === 0)
+            this.daño = 1 ;
+        else
+            this.daño = 1* daño;
         this.orientar(orientacion);
     }
 
