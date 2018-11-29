@@ -58,7 +58,80 @@ class GameLayer extends Layer {
         this.puertas = [];
 
 
-        this.cargarMapa("res/" + nivelActual + ".txt");
+        this.cargarMapa("res/" + 0 + ".txt");
+    }
+
+    guardarNivel() {
+
+        niveles_explorados[nivelActual] = {
+            "enemigos": this.enemigos,
+            "bombas": this.bombas,
+            "corazones": this.corazones,
+            "power_ups": this.powerups
+        }
+
+    }
+
+    cargarSiguienteNivel() {
+        reproducirMusica();
+
+        this.botonSalto = new Boton(imagenes.boton_salto, 480 * 0.9, 320 * 0.55);
+        this.botonDisparo = new Boton(imagenes.boton_disparo, 480 * 0.75, 320 * 0.83);
+        this.pad = new Pad(480 * 0.14, 320 * 0.8);
+        this.espacio = new Espacio();
+
+        this.corazon_1 = new Fondo(imagenes.vida_llena, 480 * 0.1, 320 * 0.05);
+        this.corazon_2 = new Fondo(imagenes.vida_llena, 480 * 0.125, 320 * 0.05);
+        this.corazon_3 = new Fondo(imagenes.vida_llena, 480 * 0.15, 320 * 0.05);
+
+        this.dañoIcono = new Fondo(imagenes.daño, 480 * 0.05, 320 * 0.2);
+        this.velocidadIcono = new Fondo(imagenes.velocidad, 480 * 0.05, 320 * 0.30);
+        this.cadenciaIcono = new Fondo(imagenes.cadencia, 480 * 0.05, 320 * 0.40);
+        this.jugador = new Jugador(50, 50);//Pa que no se queje
+        this.scrollX = 0;
+        this.scrollY = 0;
+        this.bombasJugador = 100;
+        this.bloques = [];
+        this.piedras = [];
+        this.corazones = [];
+        this.powerups = [];
+        this.daño = 1;
+        this.velocidad = this.jugador.v;
+        this.cadencia = this.jugador.cadenciaDisparo;
+        this.dañoTexto = new Texto(this.daño, 480 * 0.1, 320 * 0.22);
+        this.velocidadTexto = new Texto(this.velocidad, 480 * 0.1, 320 * 0.32);
+        this.cadenciaTexto = new Texto(this.cadencia, 480 * 0.1, 320 * 0.42);
+        //     this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480 * 0.85, 320 * 0.05);
+
+        //       this.puntos = new Texto(0, 480 * 0.9, 320 * 0.07);
+
+
+        this.fondo = new Fondo(imagenes.fondo_2, 480 * 0.5, 320 * 0.5);
+
+        this.disparosJugador = [];
+        this.disparosEnemigo = [];
+
+        this.daño = 1;
+
+        this.enemigos = [];
+
+        this.bombas = [];
+
+        this.explosiones = [];
+
+        this.puertas = [];
+
+
+        this.cargarMapa("res/" + nivelActual + ".txt", () => {
+
+            if (niveles_explorados[nivelActual] !== undefined) {
+                this.powerups = niveles_explorados[nivelActual]["power_ups"];
+                this.enemigos = niveles_explorados[nivelActual]["enemigos"];
+                this.corazones = niveles_explorados[nivelActual]["corazones"];
+                this.bombas = niveles_explorados[nivelActual]["bombas"];
+            }
+        });
+
     }
 
     actualizar() {
@@ -220,7 +293,10 @@ class GameLayer extends Layer {
         }
 
         if (this.isHabitacionSinEnemigos()) {
-            this.puertas.forEach(x => x.open())
+            this.puertas.forEach(x => {
+                x.open();
+                this.espacio.eliminarCuerpoEstatico(x);
+            });
         }
 
         this.calculaVida();
@@ -228,8 +304,9 @@ class GameLayer extends Layer {
         for (var i = 0; i < this.puertas.length; i++) {
             if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])) {
                 // this.pausa = true;
+                this.guardarNivel();
                 nivelActual = this.puertas[i].getNextLevel();
-                this.iniciar();
+                this.cargarSiguienteNivel();
             }
         }
 
@@ -473,7 +550,7 @@ class GameLayer extends Layer {
     }
 
 
-    cargarMapa(ruta) {
+    cargarMapa(ruta, callback) {
         var fichero = new XMLHttpRequest();
         fichero.open("GET", ruta, false);
 
@@ -497,6 +574,8 @@ class GameLayer extends Layer {
         }.bind(this);
 
         fichero.send(null);
+        if (callback !== undefined)
+            callback();
 
     }
 

@@ -63,3 +63,5 @@ var arma = {};
 arma.distancia = 1;
 arma.paralizante = 2;
 arma.cuerpo = 3;
+
+var niveles_explorados = {};
