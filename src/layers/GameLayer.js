@@ -10,6 +10,8 @@ class GameLayer extends Layer {
     iniciar() {
         reproducirMusica();
 
+        if (this.jugador.vidas <= 0)
+            this.jugador.vidas = 6;
 
         this.espacio = new Espacio();
 
@@ -129,7 +131,6 @@ class GameLayer extends Layer {
     }
 
     actualizar() {
-
 
 
         this.espacio.actualizar();
@@ -420,8 +421,6 @@ class GameLayer extends Layer {
     }
 
 
-
-
     procesarControles() {
         if (controles.continuar) {
             this.pausa = false;
@@ -524,7 +523,7 @@ class GameLayer extends Layer {
         var bloque, x, y;
 
 
-        for (var i = 1; i <= lineas[0].length + 2; i++) {
+        for (var i = 1; i <= lineas[0].length + 1; i++) {
             x = -40 / 2 + i * 38;
             y = this.altoMapa + 32 * 3 / 2;
             this.agregarParedInvisible(new Bloque(imagenes.piedra1, x, y));
@@ -627,6 +626,7 @@ class GameLayer extends Layer {
                 enemigo.y = enemigo.y - enemigo.alto / 2;
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
+                break;
             case "B":
                 var bomba = new Bomba(imagenes.bomba, x, y);
                 bomba.y = bomba.y - bomba.alto / 2;

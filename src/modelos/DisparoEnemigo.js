@@ -1,6 +1,6 @@
 class DisparoEnemigo extends DisparoBase {
 
-    constructor(x, y, destino) {
+    constructor(x, y, destino,daño) {
         super(imagenes.disparo_enemigo, x, y)
         this.normal = Math.sqrt(Math.pow(x - destino.x, 2) + Math.pow(y - destino.y, 2));
         this.multiplicador = 4;
