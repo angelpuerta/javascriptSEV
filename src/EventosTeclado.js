@@ -10,6 +10,9 @@ function onKeyDown(event) {
     if (posicion == -1) {
         teclas.push(event.keyCode);
         switch (event.keyCode) {
+            case 13:
+                controles.continuar = true;
+                break;
             case 32:
                 controles.bomba = true;
                 break;
@@ -60,8 +63,11 @@ function onKeyUp(event) {
     console.log("Tecla levantada");
 
     switch (event.keyCode) {
-        case 32:
+        case 13:
             controles.continuar = false;
+            break;
+        case 32:
+            controles.bomba = false;
             break;
         case 27:
             controles.pausar = false;

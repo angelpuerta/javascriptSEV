@@ -215,7 +215,8 @@ class GameLayer extends Layer {
                     this.jugador.daño = this.jugador.daño * 2;
                 }
                 else if (this.powerups[i].tipo == 2) {
-                    this.jugador.cadenciaDisparo = this.jugador.cadenciaDisparo - 7;
+                    if (this.jugador.cadenciaDisparo - 7 > 0)
+                        this.jugador.cadenciaDisparo = this.jugador.cadenciaDisparo - 7;
                 }
                 this.powerups.splice(i, 1);
             }
@@ -294,7 +295,6 @@ class GameLayer extends Layer {
 
         for (var i = 0; i < this.puertas.length; i++) {
             if (this.puertas[i] != null && this.puertas[i].isOpen() && this.jugador.colisiona(this.puertas[i])) {
-                // this.pausa = true;
                 this.guardarNivel();
                 nivelActual = this.puertas[i].getNextLevel();
                 this.iniciar();
@@ -422,12 +422,7 @@ class GameLayer extends Layer {
 
 
     procesarControles() {
-        if (controles.continuar) {
-            this.pausa = false;
-        }
-        if (controles.pausar) {
-            this.pausa = true;
-        }
+
         if (controles.bomba) {
             if (this.bombasJugador > 0) {
 
